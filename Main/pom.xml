@@ -9,13 +9,14 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>24</maven.compiler.source>
-        <maven.compiler.target>24</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mysql.version>8.0.33</mysql.version>
         <apache.commons.ver>3.12.0</apache.commons.ver>
         <logback.ver>1.4.7</logback.ver>
         <slf4j.ver>2.0.17</slf4j.ver>
+        <fastjson.ver>2.0.58</fastjson.ver>
     </properties>
 
     <dependencies>
@@ -40,6 +41,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.ver}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson.ver}</version>
         </dependency>
     </dependencies>
 

@@ -3,6 +3,7 @@ package com.main.builder;
 import com.main.bean.Constants;
 import com.main.bean.FieldInfo;
 import com.main.bean.TableInfo;
+import com.main.utils.JsonUtils;
 import com.main.utils.PropertiesUtils;
 import com.main.utils.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -30,6 +31,7 @@ public class BuildTable {
     // SQL查询语句，用于获取表状态信息
     private static final String SQL_SHOW_TABLE_STATUS = "show table status";
     private static final String SQL_SHOW_TABLE_FIELD = "show full fields from %s";
+    private static final String SQL_SHOW_TABLE_INDEX= "show index from %s";
 
     // 静态代码块，用于初始化数据库连接
     static {
@@ -82,7 +84,7 @@ public class BuildTable {
      * 获取数据库中所有表的信息
      * 包括表名和表的注释
      */
-    public static void getTables() {
+    public static List<TableInfo> getTables() {
         // 检查数据库连接是否存在
         if (conn == null) {
             logger.warn("数据库连接未建立，无法获取表信息");
@@ -117,10 +119,10 @@ public class BuildTable {
             // 设置bean参数名称，添加后缀
                 tableInfo.setBeanParamName(beanName + Constants.SUFFIX_BEAN_PARMA);
 
-            // 读取字段信息并设置到表信息对象中
-                List<FieldInfo> fieldInfos = readFieldInfo(tableInfo);
-                tableInfo.setFieldList(fieldInfos);
-
+            // 读取字段信息和字段对应索引信息并设置到表信息对象中
+                readFieldInfo(tableInfo);
+                getIndexInfos(tableInfo);
+                logger.info("表{}", JsonUtils.toJson(tableInfo));
             // 将表信息添加到列表中
                 tableList.add(tableInfo);
             }
@@ -128,19 +130,21 @@ public class BuildTable {
             // 记录查询失败的日志
             logger.error("查询表信息失败", e);
         }
+
+        return tableList;
     }
 
-    public static List<FieldInfo> readFieldInfo(TableInfo tableInfo) {
+    public static void readFieldInfo(TableInfo tableInfo) {
         // 检查数据库连接是否存在
         if (conn == null) {
             logger.warn("数据库连接未建立，无法获取表信息");
-            return new ArrayList<>();
+            return;
         }
 
         // 首先检查表名是否合法，防止SQL注入
         if (!isValidTableName(tableInfo.getTableName())) {
             logger.error("表名不合法: {}", tableInfo.getTableName());
-            return new ArrayList<>();
+            return;
         }
 
         List<FieldInfo> fieldList = new ArrayList<>();
@@ -177,24 +181,85 @@ public class BuildTable {
                 // 获取是否包含日期时间
                 if (ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldType.toUpperCase())){
                     tableInfo.setHaveDateTime(true);
+                } else {
+                    tableInfo.setHaveDateTime(false);
                 }
                 // 获取是否包含日期
                 if (ArrayUtils.contains(Constants.DATE_TYPES, fieldType.toUpperCase())) {
                     tableInfo.setHaveDate(true);
+                } else {
+                    tableInfo.setHaveDate(false);
                 }
                 // 获取是否包含BigDecimal
                 if (ArrayUtils.contains(Constants.DECIMAL_TYPES, fieldType.toUpperCase()) ||
                     ArrayUtils.contains(Constants.FLOAT_TYPES, fieldType.toUpperCase())) {
                     tableInfo.setHaveBigDecimal(true);
+                } else {
+                    tableInfo.setHaveBigDecimal(false);
                 }
 
                 fieldList.add(fieldInfo);
             }
+
+            tableInfo.setFieldList(fieldList);
         } catch (SQLException e) {
             logger.error("查询表 {} 的字段信息失败", tableInfo.getTableName(), e);
         }
-        
-        return fieldList;
+    }
+
+/**
+ * 获取指定表的索引信息
+ * @param tableInfo 包含表名和表结构信息的对象
+ */
+    public static void getIndexInfos(TableInfo tableInfo) {
+        // 检查数据库连接是否存在
+        if (conn == null) {
+            logger.warn("数据库连接未建立，无法获取表信息");
+            return;
+        }
+
+        // 首先检查表名是否合法，防止SQL注入
+        if (!isValidTableName(tableInfo.getTableName())) {
+            logger.error("表名不合法: {}", tableInfo.getTableName());
+            return;
+        }
+
+        // 用于存储索引信息的列表
+        List<FieldInfo> indexList = new ArrayList<>();
+        // 使用try-with-resources确保资源被正确关闭
+        try (PreparedStatement ps = conn.prepareStatement(String.format(SQL_SHOW_TABLE_INDEX, tableInfo.getTableName()));
+             ResultSet indexResult = ps.executeQuery()) {
+
+            // 遍历结果集，获取索引信息
+            while (indexResult.next()) {
+                // 获取索引名
+                String keyName = indexResult.getString("key_name");
+                // 获取索引是否唯一标识(0表示唯一索引，1表示非唯一索引)
+                Integer nonUnique = indexResult.getInt("non_unique");
+                // 获取索引对应的列名
+                String columnName = indexResult.getString("column_name");
+                // 如果是非唯一索引则跳过
+                if (nonUnique == 1) {
+                    continue;
+                }
+                // 获取当前索引名对应的字段列表
+                List<FieldInfo> keyFieldList = tableInfo.getKeyIndexMap().get(keyName);
+                // 如果列表不存在，则创建新列表
+                if (keyFieldList == null) {
+                    keyFieldList = new ArrayList<>();
+                    tableInfo.getKeyIndexMap().put(keyName, keyFieldList);
+                }
+                // 遍历表字段列表，找到匹配的字段并添加到索引字段列表中
+                for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
+                    if (fieldInfo.getFieldName().equals(columnName)) {
+                        keyFieldList.add(fieldInfo);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            // 记录错误日志
+            logger.error("查询表 {} 的字段信息失败", tableInfo.getTableName(), e);
+        }
     }
 
 /**
