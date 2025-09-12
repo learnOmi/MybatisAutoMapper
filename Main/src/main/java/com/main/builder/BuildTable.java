@@ -1,9 +1,11 @@
 package com.main.builder;
 
 import com.main.bean.Constants;
+import com.main.bean.FieldInfo;
 import com.main.bean.TableInfo;
 import com.main.utils.PropertiesUtils;
 import com.main.utils.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -27,6 +29,7 @@ public class BuildTable {
 
     // SQL查询语句，用于获取表状态信息
     private static final String SQL_SHOW_TABLE_STATUS = "show table status";
+    private static final String SQL_SHOW_TABLE_FIELD = "show full fields from %s";
 
     // 静态代码块，用于初始化数据库连接
     static {
@@ -86,6 +89,7 @@ public class BuildTable {
             return;
         }
 
+    // 创建一个用于存储表信息的列表
         List<TableInfo> tableList = new ArrayList<>();
         // 使用try-with-resources确保资源被正确关闭
         try (PreparedStatement ps = conn.prepareStatement(SQL_SHOW_TABLE_STATUS);
@@ -93,21 +97,31 @@ public class BuildTable {
             
             // 遍历结果集，输出表名和注释
             while (tableResult.next()) {
+            // 获取表名和注释
                 String tableName = tableResult.getString("name");
                 String comment = tableResult.getString("comment");
-                //logger.info("表名: {}, 注释: {}", tableName, comment);
 
-                String beaName = tableName;
+            // 处理bean名称，如果需要忽略表前缀
+                String beanName = tableName;
                 if (Constants.IGNORE_TABLE_PREFIX) {
-                    beaName = tableName.substring(tableName.indexOf("_") + 1);
+                    beanName = tableName.substring(tableName.indexOf("_") + 1);
                 }
-                beaName = processField(tableName, true);
+            // 处理字段名称
+                beanName = processField(tableName, true);
 
+            // 创建表信息对象并设置基本信息
                 TableInfo tableInfo = new TableInfo();
                 tableInfo.setTableName(tableName);
-                tableInfo.setBeanName(beaName);
+                tableInfo.setBeanName(beanName);
                 tableInfo.setComment(comment);
-                tableInfo.setBeanParamName(beaName + Constants.SUFFIX_BEAN_PARMA);
+            // 设置bean参数名称，添加后缀
+                tableInfo.setBeanParamName(beanName + Constants.SUFFIX_BEAN_PARMA);
+
+            // 读取字段信息并设置到表信息对象中
+                List<FieldInfo> fieldInfos = readFieldInfo(tableInfo);
+                tableInfo.setFieldList(fieldInfos);
+
+            // 将表信息添加到列表中
                 tableList.add(tableInfo);
             }
         } catch (SQLException e) {
@@ -116,7 +130,156 @@ public class BuildTable {
         }
     }
 
+    public static List<FieldInfo> readFieldInfo(TableInfo tableInfo) {
+        // 检查数据库连接是否存在
+        if (conn == null) {
+            logger.warn("数据库连接未建立，无法获取表信息");
+            return new ArrayList<>();
+        }
+
+        // 首先检查表名是否合法，防止SQL注入
+        if (!isValidTableName(tableInfo.getTableName())) {
+            logger.error("表名不合法: {}", tableInfo.getTableName());
+            return new ArrayList<>();
+        }
+
+        List<FieldInfo> fieldList = new ArrayList<>();
+        // 使用try-with-resources确保资源被正确关闭
+        try (PreparedStatement ps = conn.prepareStatement(String.format(SQL_SHOW_TABLE_FIELD, tableInfo.getTableName()));
+             ResultSet fieldResult = ps.executeQuery()) {
+
+            // 遍历结果集，获取字段信息
+            while (fieldResult.next()) {
+                FieldInfo fieldInfo = new FieldInfo();
+                
+                // 获取字段名并转换为驼峰命名
+                String fieldName = fieldResult.getString("field");
+                String fieldNameCamel = processField(fieldName, false);
+                fieldInfo.setPropertyName(fieldNameCamel);
+                fieldInfo.setFieldName(fieldName);
+
+                // 获取字段注释
+                String comment = fieldResult.getString("comment");
+                fieldInfo.setComment(comment);
+                
+                // 获取字段类型并映射到Java类型
+                String fieldType = fieldResult.getString("type");
+                if (fieldType.indexOf("(") > 0){
+                    fieldType = fieldType.substring(0, fieldType.indexOf("("));
+                }
+                fieldInfo.setJavaType(getJavaType(fieldType));
+                fieldInfo.setSqlType(fieldType);
+                
+                // 获取是否自增
+                String extra = fieldResult.getString("extra");
+                fieldInfo.setIsAutoIncrement("auto_increment".equalsIgnoreCase(extra));
+
+                // 获取是否包含日期时间
+                if (ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldType.toUpperCase())){
+                    tableInfo.setHaveDateTime(true);
+                }
+                // 获取是否包含日期
+                if (ArrayUtils.contains(Constants.DATE_TYPES, fieldType.toUpperCase())) {
+                    tableInfo.setHaveDate(true);
+                }
+                // 获取是否包含BigDecimal
+                if (ArrayUtils.contains(Constants.DECIMAL_TYPES, fieldType.toUpperCase()) ||
+                    ArrayUtils.contains(Constants.FLOAT_TYPES, fieldType.toUpperCase())) {
+                    tableInfo.setHaveBigDecimal(true);
+                }
+
+                fieldList.add(fieldInfo);
+            }
+        } catch (SQLException e) {
+            logger.error("查询表 {} 的字段信息失败", tableInfo.getTableName(), e);
+        }
+        
+        return fieldList;
+    }
+
 /**
+     * 验证表名是否合法，防止SQL注入
+     * @param tableName 待验证的表名
+     * @return 如果表名合法返回true，否则返回false
+     */
+    private static boolean isValidTableName(String tableName) {
+        if (tableName == null || tableName.trim().isEmpty()) {
+            return false;
+        }
+        
+        // 检查表名是否只包含字母、数字和下划线
+        if (!tableName.matches("^[a-zA-Z_][a-zA-Z0-9_]*$")) {
+            return false;
+        }
+        
+        // 检查表名是否包含可能的SQL注入关键词
+        String[] sqlKeywords = {"SELECT", "INSERT", "UPDATE", "DELETE", "DROP", "UNION", "EXEC", 
+                               "EXECUTE", "TRUNCATE", "GRANT", "REVOKE", "xp_"};
+        String upperTableName = tableName.toUpperCase();
+        
+        for (String keyword : sqlKeywords) {
+            if (upperTableName.contains(keyword)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 将数据库字段类型转换为Java类型
+     * @param fieldType 数据库字段类型
+     * @return 对应的Java类型
+     */
+    private static String getJavaType(String fieldType) {
+        if (fieldType == null) {
+            return Constants.JAVA_TYPE_STRING;
+        }
+        
+        String upperFieldType = fieldType.toUpperCase();
+        
+        // 整数类型
+        if (ArrayUtils.contains(Constants.INTEGER_TYPES, upperFieldType)) {
+            return Constants.JAVA_TYPE_INT;
+        }
+        // 长整型
+        else if (ArrayUtils.contains(Constants.LONG_TYPES, upperFieldType)) {
+            return Constants.JAVA_TYPE_LONG;
+        }
+        // 小整数类型
+        else if (ArrayUtils.contains(Constants.BYTE_TYPES, upperFieldType)) {
+            return Constants.JAVA_TYPE_BYTE;
+        }
+        else if (ArrayUtils.contains(Constants.SHORT_TYPES, upperFieldType)) {
+            return Constants.JAVA_TYPE_SHORT;
+        }
+        // 浮点类型
+        else if (ArrayUtils.contains(Constants.FLOAT_TYPES, upperFieldType)) {
+            return Constants.JAVA_TYPE_DOUBLE;
+        }
+        // 精确数值类型
+        else if (ArrayUtils.contains(Constants.DECIMAL_TYPES, upperFieldType)) {
+            return Constants.JAVA_TYPE_DECIMAL;
+        }
+        // 布尔类型
+        else if (ArrayUtils.contains(Constants.BOOLEAN_TYPES, upperFieldType)) {
+            return Constants.JAVA_TYPE_BOOLEAN;
+        }
+        // 日期时间类型
+        else if (ArrayUtils.contains(Constants.DATE_TYPES, upperFieldType) || ArrayUtils.contains(Constants.DATE_TIME_TYPES, upperFieldType)) {
+            return Constants.JAVA_TYPE_DATE;
+        }
+        // 字符串类型
+        else if (ArrayUtils.contains(Constants.STRING_TYPES, upperFieldType)) {
+            return Constants.JAVA_TYPE_STRING;
+        }
+        // 默认返回字符串类型
+        else {
+            return Constants.JAVA_TYPE_STRING;
+        }
+    }
+
+    /**
  * 处理字段字符串，将其转换为驼峰命名格式
  * @param field 待处理的字段字符串，可能包含下划线
  * @param isuperCasefirst 是否将首字母大写
