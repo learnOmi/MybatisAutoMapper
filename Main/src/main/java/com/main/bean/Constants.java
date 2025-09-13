@@ -5,6 +5,12 @@ import com.main.utils.PropertiesUtils;
 public class Constants {
     public static Boolean IGNORE_TABLE_PREFIX;
     public static String SUFFIX_BEAN_PARMA;
+    public static String PATH_BASE;
+    public static String PACKAGE_BASE;
+    public static String PACKAGE_PO;
+    public static String PATH_PO;
+    private static String PATH_JAVA = "java";
+    private String PATH_RESOURCE = "resources";
     
     // 数据库类型到Java类型的映射常量
     public static final String JAVA_TYPE_INT = "Integer";
@@ -40,5 +46,14 @@ public class Constants {
     static {
         IGNORE_TABLE_PREFIX = Boolean.valueOf(PropertiesUtils.getString("ignore.table.prefix"));
         SUFFIX_BEAN_PARMA = PropertiesUtils.getString("suffix.bean.parma");
+
+        PATH_BASE = PropertiesUtils.getString("path.base");
+        PATH_BASE = PATH_BASE + PATH_JAVA + "/" + PropertiesUtils.getString("package.base");
+        PATH_BASE = PATH_BASE.replace(".", "/");
+
+        PATH_PO = PATH_BASE + "/" + PropertiesUtils.getString("package.po").replace(".", "/");
+
+        PACKAGE_BASE = PropertiesUtils.getString("package.base");
+        PACKAGE_PO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.po");
     }
 }

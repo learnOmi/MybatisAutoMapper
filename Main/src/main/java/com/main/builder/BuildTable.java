@@ -16,7 +16,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * BuildTable类用于管理数据库连接和获取表信息
@@ -88,7 +90,7 @@ public class BuildTable {
         // 检查数据库连接是否存在
         if (conn == null) {
             logger.warn("数据库连接未建立，无法获取表信息");
-            return;
+            return new ArrayList<>();
         }
 
     // 创建一个用于存储表信息的列表
@@ -179,24 +181,12 @@ public class BuildTable {
                 fieldInfo.setIsAutoIncrement("auto_increment".equalsIgnoreCase(extra));
 
                 // 获取是否包含日期时间
-                if (ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldType.toUpperCase())){
-                    tableInfo.setHaveDateTime(true);
-                } else {
-                    tableInfo.setHaveDateTime(false);
-                }
+                tableInfo.setHaveDateTime(ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldType.toUpperCase()));
                 // 获取是否包含日期
-                if (ArrayUtils.contains(Constants.DATE_TYPES, fieldType.toUpperCase())) {
-                    tableInfo.setHaveDate(true);
-                } else {
-                    tableInfo.setHaveDate(false);
-                }
+                tableInfo.setHaveDate(ArrayUtils.contains(Constants.DATE_TYPES, fieldType.toUpperCase()));
                 // 获取是否包含BigDecimal
-                if (ArrayUtils.contains(Constants.DECIMAL_TYPES, fieldType.toUpperCase()) ||
-                    ArrayUtils.contains(Constants.FLOAT_TYPES, fieldType.toUpperCase())) {
-                    tableInfo.setHaveBigDecimal(true);
-                } else {
-                    tableInfo.setHaveBigDecimal(false);
-                }
+                tableInfo.setHaveBigDecimal(ArrayUtils.contains(Constants.DECIMAL_TYPES, fieldType.toUpperCase()) ||
+                        ArrayUtils.contains(Constants.FLOAT_TYPES, fieldType.toUpperCase()));
 
                 fieldList.add(fieldInfo);
             }
@@ -230,6 +220,11 @@ public class BuildTable {
         try (PreparedStatement ps = conn.prepareStatement(String.format(SQL_SHOW_TABLE_INDEX, tableInfo.getTableName()));
              ResultSet indexResult = ps.executeQuery()) {
 
+            Map<String, FieldInfo> tempMap = new HashMap<>();
+            // 遍历表字段列表，找到匹配的字段并添加到索引字段列表中
+            for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
+                tempMap.put(fieldInfo.getFieldName(), fieldInfo);
+            }
             // 遍历结果集，获取索引信息
             while (indexResult.next()) {
                 // 获取索引名
@@ -249,12 +244,7 @@ public class BuildTable {
                     keyFieldList = new ArrayList<>();
                     tableInfo.getKeyIndexMap().put(keyName, keyFieldList);
                 }
-                // 遍历表字段列表，找到匹配的字段并添加到索引字段列表中
-                for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
-                    if (fieldInfo.getFieldName().equals(columnName)) {
-                        keyFieldList.add(fieldInfo);
-                    }
-                }
+                keyFieldList.add(tempMap.get(columnName));
             }
         } catch (SQLException e) {
             // 记录错误日志
