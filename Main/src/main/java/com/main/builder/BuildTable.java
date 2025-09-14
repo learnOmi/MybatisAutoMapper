@@ -3,6 +3,7 @@ package com.main.builder;
 import com.main.bean.Constants;
 import com.main.bean.FieldInfo;
 import com.main.bean.TableInfo;
+import com.main.utils.BooleanUtils;
 import com.main.utils.JsonUtils;
 import com.main.utils.PropertiesUtils;
 import com.main.utils.StringUtils;
@@ -181,11 +182,11 @@ public class BuildTable {
                 fieldInfo.setIsAutoIncrement("auto_increment".equalsIgnoreCase(extra));
 
                 // 获取是否包含日期时间
-                tableInfo.setHaveDateTime(ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldType.toUpperCase()));
+                if (tableInfo.getHaveDateTime() == null || BooleanUtils.compare(tableInfo.getHaveDateTime(), Boolean.FALSE)) tableInfo.setHaveDateTime(ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldType.toUpperCase()));
                 // 获取是否包含日期
-                tableInfo.setHaveDate(ArrayUtils.contains(Constants.DATE_TYPES, fieldType.toUpperCase()));
+                if (tableInfo.getHaveDate() == null || BooleanUtils.compare(tableInfo.getHaveDate(), Boolean.FALSE)) tableInfo.setHaveDate(ArrayUtils.contains(Constants.DATE_TYPES, fieldType.toUpperCase()));
                 // 获取是否包含BigDecimal
-                tableInfo.setHaveBigDecimal(ArrayUtils.contains(Constants.DECIMAL_TYPES, fieldType.toUpperCase()) ||
+                if (tableInfo.getHaveBigDecimal() == null || BooleanUtils.compare(tableInfo.getHaveBigDecimal(), Boolean.FALSE)) tableInfo.setHaveBigDecimal(ArrayUtils.contains(Constants.DECIMAL_TYPES, fieldType.toUpperCase()) ||
                         ArrayUtils.contains(Constants.FLOAT_TYPES, fieldType.toUpperCase()));
 
                 fieldList.add(fieldInfo);
