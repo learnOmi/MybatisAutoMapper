@@ -20,7 +20,7 @@ public class UserInfoBeauty implements Serializable {
 	/**
 	 * 用户id
 	 */
-	private Integer user_id;
+	private Integer userId;
 
 	/**
 	 * 0: 未启用 1:启用

@@ -175,7 +175,7 @@ public class BuildTable {
                     fieldType = fieldType.substring(0, fieldType.indexOf("("));
                 }
                 fieldInfo.setJavaType(getJavaType(fieldType));
-                fieldInfo.setSqlType(fieldType);
+                fieldInfo.setSqlType(fieldType.toUpperCase());
                 
                 // 获取是否自增
                 String extra = fieldResult.getString("extra");

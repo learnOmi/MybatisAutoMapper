@@ -2,6 +2,7 @@ package com.autoMapper.entity.po;
 
 import java.io.Serializable;
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * 用户信息表
  * @author 'Tong'
@@ -11,7 +12,7 @@ public class UserInfo implements Serializable {
 	/**
 	 * 用户id
 	 */
-	private Integer user_id;
+	private Integer userId;
 
 	/**
 	 * 邮箱
@@ -21,12 +22,12 @@ public class UserInfo implements Serializable {
 	/**
 	 * 昵称
 	 */
-	private String nick_name;
+	private String nickName;
 
 	/**
 	 * 0:直接加入 1:同意后加入
 	 */
-	private Byte join_type;
+	private Byte joinType;
 
 	/**
 	 * 性别 0:女 1:男
@@ -41,7 +42,7 @@ public class UserInfo implements Serializable {
 	/**
 	 * 个性签名
 	 */
-	private String personal_signature;
+	private String personalSignature;
 
 	/**
 	 * 状态
@@ -51,26 +52,28 @@ public class UserInfo implements Serializable {
 	/**
 	 * 创建时间
 	 */
-	private Date create_time;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	private Date createTime;
 
 	/**
 	 * 最后登录时间
 	 */
-	private Date last_login_time;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	private Date lastLoginTime;
 
 	/**
 	 * 地区
 	 */
-	private String area_name;
+	private String areaName;
 
 	/**
 	 * 地区编号
 	 */
-	private String area_code;
+	private String areaCode;
 
 	/**
 	 * 最后离开时间
 	 */
-	private Long last_off_time;
+	private Long lastOffTime;
 
 }

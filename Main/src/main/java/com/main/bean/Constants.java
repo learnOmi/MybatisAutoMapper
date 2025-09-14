@@ -6,6 +6,18 @@ public class Constants {
     public static String AUTHOR_COMMENT;
     public static Boolean IGNORE_TABLE_PREFIX;
     public static String SUFFIX_BEAN_PARMA;
+
+    // 需要忽略的属性
+    public static String IGNORE_BEAN_TOJSON_FILED;
+    public static String IGNORE_BEAN_TOJSON_EXPRESSION;
+    public static String IGNORE_BEAN_TOJSON_CLASS;
+
+    // 日期格式序列化，反序列化
+    public static String BEAN_DATE_FORMAT_EXPRESSION;
+    public static String BEAN_DATE_FORMAT_CLASS;
+    public static String BEAN_DATE_PARSE_EXPRESSION;
+    public static String BEAN_DATE_PARSE_CLASS;
+
     public static String PATH_BASE;
     public static String PACKAGE_BASE;
     public static String PACKAGE_PO;
@@ -49,13 +61,20 @@ public class Constants {
         IGNORE_TABLE_PREFIX = Boolean.valueOf(PropertiesUtils.getString("ignore.table.prefix"));
         SUFFIX_BEAN_PARMA = PropertiesUtils.getString("suffix.bean.parma");
 
-        PATH_BASE = PropertiesUtils.getString("path.base");
-        PATH_BASE = PATH_BASE + PATH_JAVA + "/" + PropertiesUtils.getString("package.base");
-        PATH_BASE = PATH_BASE.replace(".", "/");
-
-        PATH_PO = PATH_BASE + "/" + PropertiesUtils.getString("package.po").replace(".", "/");
+        IGNORE_BEAN_TOJSON_FILED = PropertiesUtils.getString("ignore.bean.tojson.filed");
+        IGNORE_BEAN_TOJSON_EXPRESSION = PropertiesUtils.getString("ignore.bean.tojson.expression");
+        IGNORE_BEAN_TOJSON_CLASS = PropertiesUtils.getString("ignore.bean.tojson.class");
+        BEAN_DATE_FORMAT_EXPRESSION = PropertiesUtils.getString("bean.date.format.expression");
+        BEAN_DATE_FORMAT_CLASS = PropertiesUtils.getString("bean.date.format.class");
+        BEAN_DATE_PARSE_EXPRESSION = PropertiesUtils.getString("bean.date.parse.expression");
+        BEAN_DATE_PARSE_CLASS = PropertiesUtils.getString("bean.date.parse.class");
 
         PACKAGE_BASE = PropertiesUtils.getString("package.base");
         PACKAGE_PO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.po");
+
+        PATH_BASE = PropertiesUtils.getString("path.base");
+        PATH_BASE = PATH_BASE + PATH_JAVA;
+
+        PATH_PO = PATH_BASE + "/" + PACKAGE_PO.replace(".", "/");
     }
 }

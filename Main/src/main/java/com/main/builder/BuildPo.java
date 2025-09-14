@@ -3,6 +3,8 @@ package com.main.builder;
 import com.main.bean.Constants;
 import com.main.bean.FieldInfo;
 import com.main.bean.TableInfo;
+import com.main.utils.DateUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +31,11 @@ public class BuildPo {
             bw.newLine();
 
             if (tableInfo.getHaveDate() || tableInfo.getHaveDateTime()) {
-                        bw.write("import java.util.Date;");
+                bw.write("import java.util.Date;");
+                bw.newLine();
+                bw.write(Constants.BEAN_DATE_FORMAT_CLASS);
+                bw.newLine();
+                bw.write(Constants.BEAN_DATE_PARSE_CLASS);
                 bw.newLine();
             }
 
@@ -45,7 +51,24 @@ public class BuildPo {
 
             for(FieldInfo fieldInfo : tableInfo.getFieldList()){
                 BuildComment.createFieldComment(bw, fieldInfo.getComment());
-                bw.write("\tprivate " + fieldInfo.getJavaType() + " " + fieldInfo.getFieldName() + ";");
+
+                if (ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldInfo.getSqlType())){
+                    bw.write("\t" + String.format(Constants.BEAN_DATE_FORMAT_EXPRESSION, DateUtils.DATE_TIME_FORMAT));
+                    bw.newLine();
+
+                    bw.write("\t" + String.format(Constants.BEAN_DATE_PARSE_EXPRESSION, DateUtils.DATE_TIME_FORMAT));
+                    bw.newLine();
+                }
+
+                if (ArrayUtils.contains(Constants.DATE_TYPES, fieldInfo.getSqlType())){
+                    bw.write("\t" + String.format(Constants.BEAN_DATE_FORMAT_EXPRESSION, DateUtils.DATE_FORMAT));
+                    bw.newLine();
+
+                    bw.write("\t" + String.format(Constants.BEAN_DATE_PARSE_EXPRESSION, DateUtils.DATE_FORMAT));
+                    bw.newLine();
+                }
+
+                bw.write("\tprivate " + fieldInfo.getJavaType() + " " + fieldInfo.getPropertyName() + ";");
                 bw.newLine();
                 bw.newLine();
             }
