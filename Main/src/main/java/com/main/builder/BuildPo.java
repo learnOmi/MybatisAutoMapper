@@ -1,6 +1,7 @@
 package com.main.builder;
 
 import com.main.bean.Constants;
+import com.main.bean.FieldInfo;
 import com.main.bean.TableInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,12 @@ public class BuildPo {
             bw.write("public class " + tableInfo.getBeanName() + " implements Serializable {");
             bw.newLine();
 
-
+            for(FieldInfo fieldInfo : tableInfo.getFieldList()){
+                BuildComment.createFieldComment(bw, fieldInfo.getComment());
+                bw.write("\tprivate " + fieldInfo.getJavaType() + " " + fieldInfo.getFieldName() + ";");
+                bw.newLine();
+                bw.newLine();
+            }
 
             bw.write("}");
             bw.flush();

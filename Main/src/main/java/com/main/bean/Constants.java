@@ -3,6 +3,7 @@ package com.main.bean;
 import com.main.utils.PropertiesUtils;
 
 public class Constants {
+    public static String AUTHOR_COMMENT;
     public static Boolean IGNORE_TABLE_PREFIX;
     public static String SUFFIX_BEAN_PARMA;
     public static String PATH_BASE;
@@ -18,9 +19,9 @@ public class Constants {
     public static final String JAVA_TYPE_BYTE = "Byte";
     public static final String JAVA_TYPE_SHORT = "Short";
     public static final String JAVA_TYPE_DOUBLE = "Double";
-    public static final String JAVA_TYPE_DECIMAL = "java.math.BigDecimal";
+    public static final String JAVA_TYPE_DECIMAL = "BigDecimal";
     public static final String JAVA_TYPE_BOOLEAN = "Boolean";
-    public static final String JAVA_TYPE_DATE = "java.util.Date";
+    public static final String JAVA_TYPE_DATE = "Date";
     public static final String JAVA_TYPE_STRING = "String";
     
     // 整数类型数组
@@ -44,6 +45,7 @@ public class Constants {
     public static final String[] STRING_TYPES = { "TEXT", "CHAR", "VARCHAR" };
 
     static {
+        AUTHOR_COMMENT = PropertiesUtils.getString("author.comment");
         IGNORE_TABLE_PREFIX = Boolean.valueOf(PropertiesUtils.getString("ignore.table.prefix"));
         SUFFIX_BEAN_PARMA = PropertiesUtils.getString("suffix.bean.parma");
 
