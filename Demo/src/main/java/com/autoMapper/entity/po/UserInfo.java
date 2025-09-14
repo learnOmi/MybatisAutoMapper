@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
+import com.autoMapper.utils.DateUtils;
+import com.autoMapper.enums.DateTimePatternEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * 用户信息表
@@ -183,8 +185,8 @@ public class UserInfo implements Serializable {
 			"password=" + (password == null ? "空" : password) + ", " +
 			"personalSignature=" + (personalSignature == null ? "空" : personalSignature) + ", " +
 			"status=" + (status == null ? "空" : status) + ", " +
-			"createTime=" + (createTime == null ? "空" : createTime) + ", " +
-			"lastLoginTime=" + (lastLoginTime == null ? "空" : lastLoginTime) + ", " +
+			"createTime=" + (createTime == null ? "空" : DateUtils.format(createTime, DateTimePatternEnum.YYYY_MM_DD_HH_MM_SS.getPattern())) + ", " +
+			"lastLoginTime=" + (lastLoginTime == null ? "空" : DateUtils.format(lastLoginTime, DateTimePatternEnum.YYYY_MM_DD_HH_MM_SS.getPattern())) + ", " +
 			"areaName=" + (areaName == null ? "空" : areaName) + ", " +
 			"areaCode=" + (areaCode == null ? "空" : areaCode) + ", " +
 			"lastOffTime=" + (lastOffTime == null ? "空" : lastOffTime) + 

@@ -1,6 +1,7 @@
 package com.main;
 
 import com.main.bean.TableInfo;
+import com.main.builder.BuildBase;
 import com.main.builder.BuildPo;
 import com.main.builder.BuildTable;
 
@@ -12,5 +13,6 @@ public class Application {
         for (TableInfo tableInfo : tableInfoList) {
             BuildPo.execute(tableInfo);
         }
+        BuildBase.execute();
     }
 }

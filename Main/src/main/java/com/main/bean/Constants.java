@@ -18,6 +18,10 @@ public class Constants {
     public static String BEAN_DATE_PARSE_EXPRESSION;
     public static String BEAN_DATE_PARSE_CLASS;
 
+    public static String PACKAGE_ENUM;
+    public static String PATH_ENUM;
+    public static String PACKAGE_UTILS;
+    public static String PATH_UTILS;
     public static String PATH_BASE;
     public static String PACKAGE_BASE;
     public static String PACKAGE_PO;
@@ -71,10 +75,14 @@ public class Constants {
 
         PACKAGE_BASE = PropertiesUtils.getString("package.base");
         PACKAGE_PO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.po");
+        PACKAGE_UTILS = PACKAGE_BASE + "." + PropertiesUtils.getString("package.utils");
+        PACKAGE_ENUM = PACKAGE_BASE + "." + PropertiesUtils.getString("package.enum");
 
         PATH_BASE = PropertiesUtils.getString("path.base");
         PATH_BASE = PATH_BASE + PATH_JAVA;
 
         PATH_PO = PATH_BASE + "/" + PACKAGE_PO.replace(".", "/");
+        PATH_UTILS = PATH_BASE + "/" + PACKAGE_UTILS.replace(".", "/");
+        PATH_ENUM = PATH_BASE + "/" + PACKAGE_ENUM.replace(".", "/");
     }
 }
