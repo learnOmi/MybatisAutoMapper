@@ -5,7 +5,10 @@ import com.main.utils.PropertiesUtils;
 public class Constants {
     public static String AUTHOR_COMMENT;
     public static Boolean IGNORE_TABLE_PREFIX;
-    public static String SUFFIX_BEAN_PARMA;
+    public static String SUFFIX_BEAN_QUERY;
+    public static String SUFFIX_BEAN_QUERY_FUZZY;
+    public static String SUFFIX_BEAN_QUERY_TIME_START;
+    public static String SUFFIX_BEAN_QUERY_TIME_END;
 
     // 需要忽略的属性
     public static String IGNORE_BEAN_TOJSON_FILED;
@@ -18,6 +21,9 @@ public class Constants {
     public static String BEAN_DATE_PARSE_EXPRESSION;
     public static String BEAN_DATE_PARSE_CLASS;
 
+
+    public static String PACKAGE_QUERY;
+    public static String PATH_QUERY;
     public static String PACKAGE_ENUM;
     public static String PATH_ENUM;
     public static String PACKAGE_UTILS;
@@ -63,7 +69,10 @@ public class Constants {
     static {
         AUTHOR_COMMENT = PropertiesUtils.getString("author.comment");
         IGNORE_TABLE_PREFIX = Boolean.valueOf(PropertiesUtils.getString("ignore.table.prefix"));
-        SUFFIX_BEAN_PARMA = PropertiesUtils.getString("suffix.bean.parma");
+        SUFFIX_BEAN_QUERY = PropertiesUtils.getString("suffix.bean.parma");
+        SUFFIX_BEAN_QUERY_FUZZY = PropertiesUtils.getString("suffix.bean.query.fuzzy");
+        SUFFIX_BEAN_QUERY_TIME_START = PropertiesUtils.getString("suffix.bean.query.time.start");
+        SUFFIX_BEAN_QUERY_TIME_END = PropertiesUtils.getString("suffix.bean.query.time.end");
 
         IGNORE_BEAN_TOJSON_FILED = PropertiesUtils.getString("ignore.bean.tojson.filed");
         IGNORE_BEAN_TOJSON_EXPRESSION = PropertiesUtils.getString("ignore.bean.tojson.expression");
@@ -75,6 +84,7 @@ public class Constants {
 
         PACKAGE_BASE = PropertiesUtils.getString("package.base");
         PACKAGE_PO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.po");
+        PACKAGE_QUERY = PACKAGE_BASE + "." + PropertiesUtils.getString("package.query");
         PACKAGE_UTILS = PACKAGE_BASE + "." + PropertiesUtils.getString("package.utils");
         PACKAGE_ENUM = PACKAGE_BASE + "." + PropertiesUtils.getString("package.enum");
 
@@ -82,6 +92,7 @@ public class Constants {
         PATH_BASE = PATH_BASE + PATH_JAVA;
 
         PATH_PO = PATH_BASE + "/" + PACKAGE_PO.replace(".", "/");
+        PATH_QUERY = PATH_BASE + "/" + PACKAGE_QUERY.replace(".", "/");
         PATH_UTILS = PATH_BASE + "/" + PACKAGE_UTILS.replace(".", "/");
         PATH_ENUM = PATH_BASE + "/" + PACKAGE_ENUM.replace(".", "/");
     }

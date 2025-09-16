@@ -1,50 +1,58 @@
-package com.autoMapper.entity.po;
+package com.autoMapper.entity.query;
 
-import java.io.Serializable;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.autoMapper.utils.DateUtils;
-import com.autoMapper.enums.DateTimePatternEnum;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
- * 用户信息表
+ * 用户信息表查询
  * @author 'Tong'
  * @since 2025/09/17
  */
-public class UserInfo implements Serializable {
+public class UserInfoQuery {
 	// 用户id
 	private Integer userId;
 	// 邮箱
 	private String email;
+	private String emailFuzzy;
+
 	// 昵称
 	private String nickName;
+	private String nickNameFuzzy;
+
 	// 0:直接加入 1:同意后加入
 	private Byte joinType;
 	// 性别 0:女 1:男
 	private Byte sex;
 	// 密码
 	private String password;
+	private String passwordFuzzy;
+
 	// 个性签名
 	private String personalSignature;
+	private String personalSignatureFuzzy;
+
 	// 状态
-	@JsonIgnore
 	private Byte status;
 	// 创建时间
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
+	private String createTimeStart;
+
+	private String createTimeEnd;
+
 	// 最后登录时间
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date lastLoginTime;
+	private String lastLoginTimeStart;
+
+	private String lastLoginTimeEnd;
+
 	// 地区
 	private String areaName;
+	private String areaNameFuzzy;
+
 	// 地区编号
 	private String areaCode;
+	private String areaCodeFuzzy;
+
 	// 最后离开时间
 	private Long lastOffTime;
-
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
@@ -149,22 +157,84 @@ public class UserInfo implements Serializable {
 		return lastOffTime;
 	}
 
-	@Override
-	public String toString() {
-		return "UserInfo [" +
-			"userId=" + (userId == null ? "空" : userId) + ", " +
-			"email=" + (email == null ? "空" : email) + ", " +
-			"nickName=" + (nickName == null ? "空" : nickName) + ", " +
-			"joinType=" + (joinType == null ? "空" : joinType) + ", " +
-			"sex=" + (sex == null ? "空" : sex) + ", " +
-			"password=" + (password == null ? "空" : password) + ", " +
-			"personalSignature=" + (personalSignature == null ? "空" : personalSignature) + ", " +
-			"status=" + (status == null ? "空" : status) + ", " +
-			"createTime=" + (createTime == null ? "空" : DateUtils.format(createTime, DateTimePatternEnum.YYYY_MM_DD_HH_MM_SS.getPattern())) + ", " +
-			"lastLoginTime=" + (lastLoginTime == null ? "空" : DateUtils.format(lastLoginTime, DateTimePatternEnum.YYYY_MM_DD_HH_MM_SS.getPattern())) + ", " +
-			"areaName=" + (areaName == null ? "空" : areaName) + ", " +
-			"areaCode=" + (areaCode == null ? "空" : areaCode) + ", " +
-			"lastOffTime=" + (lastOffTime == null ? "空" : lastOffTime) + 
-			"]";
+	public void setEmailFuzzy(String emailFuzzy) {
+		this.emailFuzzy = emailFuzzy;
 	}
+
+	public String getEmailFuzzy() {
+		return emailFuzzy;
+	}
+
+	public void setNickNameFuzzy(String nickNameFuzzy) {
+		this.nickNameFuzzy = nickNameFuzzy;
+	}
+
+	public String getNickNameFuzzy() {
+		return nickNameFuzzy;
+	}
+
+	public void setPasswordFuzzy(String passwordFuzzy) {
+		this.passwordFuzzy = passwordFuzzy;
+	}
+
+	public String getPasswordFuzzy() {
+		return passwordFuzzy;
+	}
+
+	public void setPersonalSignatureFuzzy(String personalSignatureFuzzy) {
+		this.personalSignatureFuzzy = personalSignatureFuzzy;
+	}
+
+	public String getPersonalSignatureFuzzy() {
+		return personalSignatureFuzzy;
+	}
+
+	public void setCreateTimeStart(String createTimeStart) {
+		this.createTimeStart = createTimeStart;
+	}
+
+	public String getCreateTimeStart() {
+		return createTimeStart;
+	}
+
+	public void setCreateTimeEnd(String createTimeEnd) {
+		this.createTimeEnd = createTimeEnd;
+	}
+
+	public String getCreateTimeEnd() {
+		return createTimeEnd;
+	}
+
+	public void setLastLoginTimeStart(String lastLoginTimeStart) {
+		this.lastLoginTimeStart = lastLoginTimeStart;
+	}
+
+	public String getLastLoginTimeStart() {
+		return lastLoginTimeStart;
+	}
+
+	public void setLastLoginTimeEnd(String lastLoginTimeEnd) {
+		this.lastLoginTimeEnd = lastLoginTimeEnd;
+	}
+
+	public String getLastLoginTimeEnd() {
+		return lastLoginTimeEnd;
+	}
+
+	public void setAreaNameFuzzy(String areaNameFuzzy) {
+		this.areaNameFuzzy = areaNameFuzzy;
+	}
+
+	public String getAreaNameFuzzy() {
+		return areaNameFuzzy;
+	}
+
+	public void setAreaCodeFuzzy(String areaCodeFuzzy) {
+		this.areaCodeFuzzy = areaCodeFuzzy;
+	}
+
+	public String getAreaCodeFuzzy() {
+		return areaCodeFuzzy;
+	}
+
 }

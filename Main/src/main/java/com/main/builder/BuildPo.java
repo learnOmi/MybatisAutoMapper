@@ -119,8 +119,9 @@ public class BuildPo {
                 // 写入字段声明
                 bw.write("\tprivate " + fieldInfo.getJavaType() + " " + fieldInfo.getPropertyName() + ";");
                 bw.newLine();
-                bw.newLine();
+                //bw.newLine();
             }
+            bw.newLine();
 
             // 生成所有字段的getter和setter方法
             for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
@@ -140,6 +141,7 @@ public class BuildPo {
                 bw.write("\t\treturn " + fieldInfo.getPropertyName() + ";");
                 bw.newLine();
                 bw.write("\t}");
+                bw.newLine();
                 bw.newLine();
             }
 

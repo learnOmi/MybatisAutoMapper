@@ -1,23 +1,21 @@
-package com.autoMapper.entity.po;
+package com.autoMapper.entity.query;
 
-import java.io.Serializable;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
- * 靓号表
+ * 靓号表查询
  * @author 'Tong'
  * @since 2025/09/17
  */
-public class UserInfoBeauty implements Serializable {
+public class UserInfoBeautyQuery {
 	// 
 	private Integer id;
 	// 邮箱
 	private String email;
+	private String emailFuzzy;
+
 	// 用户id
 	private Integer userId;
 	// 0: 未启用 1:启用
-	@JsonIgnore
 	private Byte status;
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -50,13 +48,12 @@ public class UserInfoBeauty implements Serializable {
 		return status;
 	}
 
-	@Override
-	public String toString() {
-		return "UserInfoBeauty [" +
-			"id=" + (id == null ? "空" : id) + ", " +
-			"email=" + (email == null ? "空" : email) + ", " +
-			"userId=" + (userId == null ? "空" : userId) + ", " +
-			"status=" + (status == null ? "空" : status) + 
-			"]";
+	public void setEmailFuzzy(String emailFuzzy) {
+		this.emailFuzzy = emailFuzzy;
 	}
+
+	public String getEmailFuzzy() {
+		return emailFuzzy;
+	}
+
 }

@@ -120,7 +120,7 @@ public class BuildTable {
                 tableInfo.setBeanName(beanName);
                 tableInfo.setComment(comment);
             // 设置bean参数名称，添加后缀
-                tableInfo.setBeanParamName(beanName + Constants.SUFFIX_BEAN_PARMA);
+                tableInfo.setBeanParamName(beanName + Constants.SUFFIX_BEAN_QUERY);
 
             // 读取字段信息和字段对应索引信息并设置到表信息对象中
                 readFieldInfo(tableInfo);

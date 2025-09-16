@@ -20,8 +20,9 @@ public class BuildComment {
     }
 
     public static void createFieldComment (BufferedWriter bw, String fieldComment) throws Exception {
-        bw.write("\t/**\n");
-        bw.write("\t * " + (fieldComment == null ? "" : fieldComment) + "\n");
-        bw.write("\t */\n");
+        //bw.write("\t/**\n");
+        //bw.write("\t * " + (fieldComment == null ? "" : fieldComment) + "\n");
+        bw.write("\t// " + (fieldComment == null ? "" : fieldComment) + "\n");
+        //bw.write("\t */\n");
     }
 }
