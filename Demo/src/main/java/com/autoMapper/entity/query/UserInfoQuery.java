@@ -4,7 +4,7 @@ import java.util.Date;
 /**
  * 用户信息表查询
  * @author 'Tong'
- * @since 2025/09/17
+ * @since 2025/09/18
  */
 public class UserInfoQuery {
 	// 用户id
@@ -35,13 +35,13 @@ public class UserInfoQuery {
 	private Date createTime;
 	private String createTimeStart;
 
-	private String createTimeEnd;
+	private String createTimeEnd);
 
 	// 最后登录时间
 	private Date lastLoginTime;
 	private String lastLoginTimeStart;
 
-	private String lastLoginTimeEnd;
+	private String lastLoginTimeEnd);
 
 	// 地区
 	private String areaName;

@@ -1,20 +1,18 @@
 package com.main;
 
 import com.main.bean.TableInfo;
-import com.main.builder.BuildBase;
-import com.main.builder.BuildPo;
-import com.main.builder.BuildQuery;
-import com.main.builder.BuildTable;
+import com.main.builder.*;
 
 import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
+        BuildBase.execute();
         List<TableInfo> tableInfoList = BuildTable.getTables();
         for (TableInfo tableInfo : tableInfoList) {
             BuildPo.execute(tableInfo);
             BuildQuery.execute(tableInfo);
+            BuildMapper.execute(tableInfo);
         }
-        BuildBase.execute();
     }
 }

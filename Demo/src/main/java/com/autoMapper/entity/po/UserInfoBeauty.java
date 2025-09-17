@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * 靓号表
  * @author 'Tong'
- * @since 2025/09/17
+ * @since 2025/09/18
  */
 public class UserInfoBeauty implements Serializable {
 	// 

@@ -20,9 +20,12 @@ public class BuildBase {
         build(headerInfoList, "DateTimePatternEnum", Constants.PATH_ENUM);
 
         headerInfoList.clear();
-
         headerInfoList.add("package " + Constants.PACKAGE_UTILS + ";");
         build(headerInfoList, "DateUtils", Constants.PATH_UTILS);
+
+        headerInfoList.clear();
+        headerInfoList.add("package " + Constants.PACKAGE_MAPPER + ";");
+        build(headerInfoList, "BaseMapper", Constants.PATH_MAPPER);
     }
 
     private static void build (List<String> headerInfoList, String fileName, String outPath){
