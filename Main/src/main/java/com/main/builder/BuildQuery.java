@@ -125,11 +125,12 @@ public class BuildQuery {
                 }
             }
 
-            // 将扩展字段（模糊查询字段和时间范围查询字段）添加到字段列表中
-            tableInfo.getFieldList().addAll(extendList);
+            // 创建一个合并后的字段列表，包含原始字段和扩展字段，但不修改原始tableInfo中的FieldList
+            List<FieldInfo> allFieldList = new ArrayList<>(tableInfo.getFieldList());
+            allFieldList.addAll(extendList);
 
             // 生成所有字段的getter和setter方法，包括原始字段和扩展字段
-            for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
+            for (FieldInfo fieldInfo : allFieldList) {
                 // 将属性名首字母大写，用于构造getter和setter方法名
                 String methodName = StringUtils.uperCaseFirst(fieldInfo.getPropertyName());
                 

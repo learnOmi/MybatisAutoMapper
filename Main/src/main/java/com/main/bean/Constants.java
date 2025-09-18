@@ -22,7 +22,7 @@ public class Constants {
     public static String BEAN_DATE_PARSE_EXPRESSION;
     public static String BEAN_DATE_PARSE_CLASS;
 
-
+    public static String PATH_MAPPER_XML;
     public static String PACKAGE_MAPPER;
     public static String PATH_MAPPER;
     public static String PACKAGE_QUERY;
@@ -36,7 +36,7 @@ public class Constants {
     public static String PACKAGE_PO;
     public static String PATH_PO;
     private static String PATH_JAVA = "java";
-    private String PATH_RESOURCE = "resources";
+    private static String PATH_RESOURCE = "resources";
     
     // 数据库类型到Java类型的映射常量
     public static final String JAVA_TYPE_INT = "Integer";
@@ -101,5 +101,6 @@ public class Constants {
         PATH_UTILS = PATH_BASE + "/" + PACKAGE_UTILS.replace(".", "/");
         PATH_ENUM = PATH_BASE + "/" + PACKAGE_ENUM.replace(".", "/");
         PATH_MAPPER = PATH_BASE + "/" + PACKAGE_MAPPER.replace(".", "/");
+        PATH_MAPPER_XML = PropertiesUtils.getString("path.base") + PATH_RESOURCE + "/" + PACKAGE_MAPPER.replace(".", "/");
     }
 }
