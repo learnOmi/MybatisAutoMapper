@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * 靓号表mapper
  * @author 'Tong'
- * @since 2025/09/21
+ * @since 2025/09/22
  */
 public interface UserInfoBeautyMapper<T, P> extends BaseMapper {
 
@@ -16,7 +16,7 @@ public interface UserInfoBeautyMapper<T, P> extends BaseMapper {
 	Integer updateByIdAndEmailAndUserId(@Param("bean") T t, @Param("id") Integer id, @Param("email") String email, @Param("userId") Integer userId);
 
 	// 根据IdAndEmailAndUserId删除
-	Integer deletetByIdAndEmailAndUserId(@Param("id") Integer id, @Param("email") String email, @Param("userId") Integer userId);
+	Integer deleteByIdAndEmailAndUserId(@Param("id") Integer id, @Param("email") String email, @Param("userId") Integer userId);
 
 	// 根据UserId查询
 	T selectByUserId(@Param("userId") Integer userId);
@@ -25,7 +25,7 @@ public interface UserInfoBeautyMapper<T, P> extends BaseMapper {
 	Integer updateByUserId(@Param("bean") T t, @Param("userId") Integer userId);
 
 	// 根据UserId删除
-	Integer deletetByUserId(@Param("userId") Integer userId);
+	Integer deleteByUserId(@Param("userId") Integer userId);
 
 	// 根据Email查询
 	T selectByEmail(@Param("email") String email);
@@ -34,5 +34,5 @@ public interface UserInfoBeautyMapper<T, P> extends BaseMapper {
 	Integer updateByEmail(@Param("bean") T t, @Param("email") String email);
 
 	// 根据Email删除
-	Integer deletetByEmail(@Param("email") String email);
+	Integer deleteByEmail(@Param("email") String email);
 }

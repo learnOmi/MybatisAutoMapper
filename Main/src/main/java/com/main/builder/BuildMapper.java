@@ -102,7 +102,7 @@ public class BuildMapper {
                 // 生成根据指定条件删除记录的方法
                 // 注意：这里有个拼写错误，应该是"deleteBy"而不是"deletetBy"
                 BuildComment.createFieldComment(bw, "根据" + methodName + "删除");
-                bw.write("\tInteger deletetBy" + methodName + "(" + methodParam + ");");
+                bw.write("\tInteger deleteBy" + methodName + "(" + methodParam + ");");
                 bw.newLine();
             }
 

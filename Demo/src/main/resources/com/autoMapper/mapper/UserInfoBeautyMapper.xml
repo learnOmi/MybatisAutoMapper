@@ -67,4 +67,219 @@
 		SELECT count(1) FROM user_info_beauty 
 		<include refid="query_condition"/>
 	</select>
+
+	<!-- 插入(匹配有值的字段) -->
+	<insert id="insert" parameterType="com.autoMapper.entity.po.UserInfoBeauty">
+		<selectKey keyProperty="bean.id" order="AFTER" resultType="Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO user_info_beauty
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="bean.id != null">
+				id, 
+			</if>
+			<if test="bean.email != null">
+				email, 
+			</if>
+			<if test="bean.userId != null">
+				user_id, 
+			</if>
+			<if test="bean.status != null">
+				status, 
+			</if>
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides="," >
+			<if test="bean.id != null">
+				#{bean.id}, 
+			</if>
+			<if test="bean.email != null">
+				#{bean.email}, 
+			</if>
+			<if test="bean.userId != null">
+				#{bean.userId}, 
+			</if>
+			<if test="bean.status != null">
+				#{bean.status}, 
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 插入或更新 -->
+	<insert id="insertOrUpdate" parameterType="com.autoMapper.entity.po.UserInfoBeauty">
+		INSERT INTO user_info_beauty
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="bean.id != null">
+				id, 
+			</if>
+			<if test="bean.email != null">
+				email, 
+			</if>
+			<if test="bean.userId != null">
+				user_id, 
+			</if>
+			<if test="bean.status != null">
+				status, 
+			</if>
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides="," >
+			<if test="bean.id != null">
+				#{bean.id}, 
+			</if>
+			<if test="bean.email != null">
+				#{bean.email}, 
+			</if>
+			<if test="bean.userId != null">
+				#{bean.userId}, 
+			</if>
+			<if test="bean.status != null">
+				#{bean.status}, 
+			</if>
+		</trim>
+		<trim prefix="on duplicate key update" suffixOverrides="," >
+			<if test="bean.status != null">
+				status = VALUES(status), 
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 批量插入 -->
+	<insert id="insertBatch" parameterType="com.autoMapper.entity.po.UserInfoBeauty">
+		INSERT INTO user_info_beauty
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			email, 
+			user_id, 
+			status, 
+		</trim>
+		values
+		<foreach collection="list" item="item" separator="," >
+			<trim prefix="(" suffix=")" suffixOverrides="," >
+				#{item.email}, 
+				#{item.userId}, 
+				#{item.status}, 
+			</trim>
+		</foreach>
+	</insert>
+
+	<!-- 批量插入或更新 -->
+	<insert id="insertOrUpdateBatch" parameterType="com.autoMapper.entity.po.UserInfoBeauty">
+		INSERT INTO user_info_beauty
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			email, 
+			user_id, 
+			status, 
+		</trim>
+		values
+		<foreach collection="list" item="item" separator="," >
+			<trim prefix="(" suffix=")" suffixOverrides="," >
+				#{item.email}, 
+				#{item.userId}, 
+				#{item.status}, 
+			</trim>
+		</foreach>
+		<trim prefix="on duplicate key update" suffixOverrides="," >
+			email = VALUES(email), 
+			user_id = VALUES(user_id), 
+			status = VALUES(status), 
+		</trim>
+	</insert>
+
+
+	<!-- 根据IdAndEmailAndUserId查询 -->
+	<select id="selectByIdAndEmailAndUserId" resultMap="base_result_map">
+		select <include refid="base_column_list"/>
+		from user_info_beauty
+		where id = #{id} and email = #{email} and user_id = #{userId} 
+	</select>
+
+	<!-- 根据IdAndEmailAndUserId删除 -->
+	<delete id="deleteByIdAndEmailAndUserId">
+		delete from user_info_beauty
+		where id = #{id} and email = #{email} and user_id = #{userId} 
+	</delete>
+
+	<!-- 根据IdAndEmailAndUserId更新 -->
+	<update id="updateByIdAndEmailAndUserId">
+		update user_info_beauty
+		<set>
+			<if test="bean.id != null">
+				id = #{bean.id}, 
+			</if>
+			<if test="bean.email != null">
+				email = #{bean.email}, 
+			</if>
+			<if test="bean.userId != null">
+				user_id = #{bean.userId}, 
+			</if>
+			<if test="bean.status != null">
+				status = #{bean.status}, 
+			</if>
+		</set>
+		where id = #{id} and email = #{email} and user_id = #{userId} 
+	</update>
+
+	<!-- 根据UserId查询 -->
+	<select id="selectByUserId" resultMap="base_result_map">
+		select <include refid="base_column_list"/>
+		from user_info_beauty
+		where user_id = #{userId} 
+	</select>
+
+	<!-- 根据UserId删除 -->
+	<delete id="deleteByUserId">
+		delete from user_info_beauty
+		where user_id = #{userId} 
+	</delete>
+
+	<!-- 根据UserId更新 -->
+	<update id="updateByUserId">
+		update user_info_beauty
+		<set>
+			<if test="bean.id != null">
+				id = #{bean.id}, 
+			</if>
+			<if test="bean.email != null">
+				email = #{bean.email}, 
+			</if>
+			<if test="bean.userId != null">
+				user_id = #{bean.userId}, 
+			</if>
+			<if test="bean.status != null">
+				status = #{bean.status}, 
+			</if>
+		</set>
+		where user_id = #{userId} 
+	</update>
+
+	<!-- 根据Email查询 -->
+	<select id="selectByEmail" resultMap="base_result_map">
+		select <include refid="base_column_list"/>
+		from user_info_beauty
+		where email = #{email} 
+	</select>
+
+	<!-- 根据Email删除 -->
+	<delete id="deleteByEmail">
+		delete from user_info_beauty
+		where email = #{email} 
+	</delete>
+
+	<!-- 根据Email更新 -->
+	<update id="updateByEmail">
+		update user_info_beauty
+		<set>
+			<if test="bean.id != null">
+				id = #{bean.id}, 
+			</if>
+			<if test="bean.email != null">
+				email = #{bean.email}, 
+			</if>
+			<if test="bean.userId != null">
+				user_id = #{bean.userId}, 
+			</if>
+			<if test="bean.status != null">
+				status = #{bean.status}, 
+			</if>
+		</set>
+		where email = #{email} 
+	</update>
 </mapper>

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest( classes = Application.class)
@@ -37,6 +39,37 @@ public class MapperTest {
     public void selectCount() {
         int count = userInfoMapper.selectCount(new UserInfoQuery());
         System.out.println(count);
+    }
+
+    @Test
+    public void update() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setNickName("张w");
+        userInfo.setCreateTime(new Date());
+        userInfoMapper.updateByUserId(userInfo, 1);
+    }
+
+    @Test
+    public void delete() {
+        userInfoMapper.deleteByUserId(12);
+    }
+
+    @Test
+    public void insert() {
+        UserInfo userInfo = new UserInfo();
+        UserInfo userInfo1 = new UserInfo();
+        userInfo.setUserId(12);
+        userInfo.setNickName("张三");
+        userInfo.setCreateTime(new Date());
+
+        userInfo1.setUserId(13);
+        userInfo1.setNickName("李四");
+        userInfo1.setCreateTime(new Date());
+
+        List<UserInfo> userInfoList = new ArrayList<>();
+        userInfoList.add(userInfo);
+        userInfoList.add(userInfo1);
+        userInfoMapper.insertBatch(userInfoList);
     }
 
 }

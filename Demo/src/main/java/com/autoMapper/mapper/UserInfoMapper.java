@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * 用户信息表mapper
  * @author 'Tong'
- * @since 2025/09/21
+ * @since 2025/09/22
  */
 public interface UserInfoMapper<T, P> extends BaseMapper {
 
@@ -16,7 +16,7 @@ public interface UserInfoMapper<T, P> extends BaseMapper {
 	Integer updateByUserId(@Param("bean") T t, @Param("userId") Integer userId);
 
 	// 根据UserId删除
-	Integer deletetByUserId(@Param("userId") Integer userId);
+	Integer deleteByUserId(@Param("userId") Integer userId);
 
 	// 根据Email查询
 	T selectByEmail(@Param("email") String email);
@@ -25,5 +25,5 @@ public interface UserInfoMapper<T, P> extends BaseMapper {
 	Integer updateByEmail(@Param("bean") T t, @Param("email") String email);
 
 	// 根据Email删除
-	Integer deletetByEmail(@Param("email") String email);
+	Integer deleteByEmail(@Param("email") String email);
 }
