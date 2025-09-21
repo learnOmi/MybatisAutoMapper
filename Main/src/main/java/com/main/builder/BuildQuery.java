@@ -69,12 +69,9 @@ public class BuildQuery {
             BuildComment.createClassComment(bw, tableInfo.getComment() + "查询");
 
             // 写入类的声明
-            bw.write("public class " + className + " {");
+            bw.write("public class " + className + " extends BaseQuery {");
             bw.newLine();
 
-            // 用于存储扩展字段的列表，包括模糊查询字段和时间范围查询字段
-            List<FieldInfo> extendList = new ArrayList();
-            
             // 遍历所有字段，生成字段声明和注释
             // 同时根据字段类型生成额外的查询条件字段
             for(FieldInfo fieldInfo : tableInfo.getFieldList()){
@@ -91,12 +88,6 @@ public class BuildQuery {
                     bw.write("\tprivate " + fieldInfo.getJavaType() + " " + fieldInfo.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_FUZZY + ";");
                     bw.newLine();
                     bw.newLine();
-
-                    // 创建模糊查询字段的FieldInfo对象并添加到扩展字段列表
-                    FieldInfo fuzzyFieldInfo = new FieldInfo();
-                    fuzzyFieldInfo.setPropertyName(fieldInfo.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_FUZZY);
-                    fuzzyFieldInfo.setJavaType(fieldInfo.getJavaType());
-                    extendList.add(fuzzyFieldInfo);
                 }
 
                 // 处理日期和日期时间类型字段，添加时间范围查询属性
@@ -107,27 +98,15 @@ public class BuildQuery {
                     bw.newLine();
 
                     // 为日期类型字段添加结束时间查询属性，属性名后添加TimeEnd后缀
-                    bw.write("\tprivate String " + fieldInfo.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_TIME_END + ");");
+                    bw.write("\tprivate String " + fieldInfo.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_TIME_END + ";");
                     bw.newLine();
                     bw.newLine();
-
-                    // 创建开始时间查询字段的FieldInfo对象并添加到扩展字段列表
-                    FieldInfo startTimeFieldInfo = new FieldInfo();
-                    startTimeFieldInfo.setPropertyName(fieldInfo.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_TIME_START);
-                    startTimeFieldInfo.setJavaType("String");
-                    extendList.add(startTimeFieldInfo);
-
-                    // 创建结束时间查询字段的FieldInfo对象并添加到扩展字段列表
-                    FieldInfo endTimeFieldInfo = new FieldInfo();
-                    endTimeFieldInfo.setPropertyName(fieldInfo.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_TIME_END);
-                    endTimeFieldInfo.setJavaType("String");
-                    extendList.add(endTimeFieldInfo);
                 }
             }
 
             // 创建一个合并后的字段列表，包含原始字段和扩展字段，但不修改原始tableInfo中的FieldList
             List<FieldInfo> allFieldList = new ArrayList<>(tableInfo.getFieldList());
-            allFieldList.addAll(extendList);
+            allFieldList.addAll(tableInfo.getFieldExtendList());
 
             // 生成所有字段的getter和setter方法，包括原始字段和扩展字段
             for (FieldInfo fieldInfo : allFieldList) {

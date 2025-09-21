@@ -17,6 +17,7 @@ public class BuildMapperXml {
     private static final Logger logger = LoggerFactory.getLogger(BuildMapperXml.class);
     private static final String BASE_COLUMN_LIST = "base_column_list";
     private static final String BASE_QUERY_CONDITION = "base_query_condition";
+    private static final String BASE_QUERY_CONDITION_EXTEND = "base_query_condition_extend";
     private static final String QUERY_CONDITION = "query_condition";
 
     public static void execute(TableInfo tableInfo) {
@@ -38,7 +39,7 @@ public class BuildMapperXml {
             bw.write("\t<!-- 实体映射 -->");
             bw.newLine();
             String poClass = Constants.PACKAGE_PO + "." + tableInfo.getBeanName();
-            bw.write("\t<resultMap id=\"" + tableInfo.getBeanName() + "Map\" type=\"" + poClass + "\">");
+            bw.write("\t<resultMap id=\"base_result_map\" type=\"" + poClass + "\">");
             bw.newLine();
 
             FieldInfo idField = null;
@@ -95,13 +96,94 @@ public class BuildMapperXml {
                 }
                 bw.write("\t\t<if test=\"query." + fieldInfo.getPropertyName() + " != null " + stringQuery + "\">");
                 bw.newLine();
-                bw.write("\t\t\tand id = #{query." + fieldInfo.getPropertyName() + "}");
+                bw.write("\t\t\tand " + fieldInfo.getFieldName() + " = #{query." + fieldInfo.getPropertyName() + "}");
                 bw.newLine();
                 bw.write("\t\t</if>");
                 bw.newLine();
             }
             bw.write("\t</sql>");
             bw.newLine();
+
+            bw.newLine();
+            bw.write("\t<!-- 扩展查询条件 -->");
+            bw.newLine();
+            bw.write("\t<sql id=\"" + BASE_QUERY_CONDITION_EXTEND + "\">");
+            bw.newLine();
+            for (FieldInfo fieldInfo : tableInfo.getFieldExtendList()) {
+                String andWhere = "";
+                if (ArrayUtils.contains(Constants.STRING_TYPES, fieldInfo.getSqlType())) {
+                    andWhere = "and " + fieldInfo.getFieldName() + " like concat('%',#{query." + fieldInfo.getPropertyName() + "},'%')";
+                } else if (ArrayUtils.contains(Constants.DATE_TYPES, fieldInfo.getSqlType()) || ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldInfo.getSqlType())) {
+                    if (fieldInfo.getPropertyName().endsWith(Constants.SUFFIX_BEAN_QUERY_TIME_START)){
+                        andWhere = "<![CDATA[ and " + fieldInfo.getFieldName() + " >= str_to_date(#{query." + fieldInfo.getPropertyName() + "}, '%Y-%m-%d')]]>";
+                    } else if (fieldInfo.getPropertyName().endsWith(Constants.SUFFIX_BEAN_QUERY_TIME_END)){
+                        andWhere = "<![CDATA[ and " + fieldInfo.getFieldName() + " < date_sub(str_to_date(#{query." + fieldInfo.getPropertyName() + "}, '%Y-%m-%d'), interval -1 day)]]>";
+                    }
+                }
+                bw.write("\t\t<if test=\"query." + fieldInfo.getPropertyName() + " != null and query." + fieldInfo.getPropertyName() + " !=''\">");
+                bw.newLine();
+                bw.write("\t\t\t" + andWhere );
+                bw.newLine();
+                bw.write("\t\t</if>");
+                bw.newLine();
+            }
+            bw.write("\t</sql>");
+            bw.newLine();
+
+            bw.newLine();
+            bw.write("\t<!-- 通用查询条件 -->");
+            bw.newLine();
+            bw.write("\t<sql id=\"" + QUERY_CONDITION + "\">");
+            bw.newLine();
+            bw.write("\t\t<where>");
+            bw.newLine();
+            bw.write("\t\t\t<include refid=\"" + BASE_QUERY_CONDITION + "\"/>");
+            bw.newLine();
+            bw.write("\t\t\t<include refid=\"" + BASE_QUERY_CONDITION_EXTEND + "\"/>");
+            bw.newLine();
+            bw.write("\t\t</where>");
+            bw.newLine();
+            bw.write("\t</sql>");
+            bw.newLine();
+
+            bw.newLine();
+            bw.write("\t<!-- 查询列表 -->");
+            bw.newLine();
+            bw.write("\t<select id=\"selectList\" resultMap=\"base_result_map\">");
+            bw.newLine();
+            bw.write("\t\tSELECT <include refid=\"" + BASE_COLUMN_LIST + "\"/>");
+            bw.newLine();
+            bw.write("\t\tFROM " + tableInfo.getTableName() + " ");
+            bw.newLine();
+            bw.write("\t\t<include refid=\"" + QUERY_CONDITION + "\"/>");
+            bw.newLine();
+            bw.write("\t\t<if test=\"query.orderBy != null and query.orderBy != ''\">");
+            bw.newLine();
+            bw.write("\t\t\torder by ${query.orderBy}");
+            bw.newLine();
+            bw.write("\t\t</if>");
+            bw.newLine();
+            bw.write("\t\t<if test=\"query.simplePage != null\">");
+            bw.newLine();
+            bw.write("\t\t\tlimit #{query.simplePage.start}, #{query.simplePage.end}");
+            bw.newLine();
+            bw.write("\t\t</if>");
+            bw.newLine();
+            bw.write("\t</select>");
+            bw.newLine();
+
+            bw.newLine();
+            bw.write("\t<!-- 查询数量 -->");
+            bw.newLine();
+            bw.write("\t<select id=\"selectCount\" resultType=\"java.lang.Integer\">");
+            bw.newLine();
+            bw.write("\t\tSELECT count(1) FROM " + tableInfo.getTableName() + " ");
+            bw.newLine();
+            bw.write("\t\t<include refid=\"" + QUERY_CONDITION + "\"/>");
+            bw.newLine();
+            bw.write("\t</select>");
+            bw.newLine();
+
 
             bw.write("</mapper>");
             bw.flush();

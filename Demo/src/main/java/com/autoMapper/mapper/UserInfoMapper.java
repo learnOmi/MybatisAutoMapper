@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * 用户信息表mapper
  * @author 'Tong'
- * @since 2025/09/18
+ * @since 2025/09/21
  */
 public interface UserInfoMapper<T, P> extends BaseMapper {
 

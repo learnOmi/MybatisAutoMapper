@@ -151,6 +151,7 @@ public class BuildTable {
         }
 
         List<FieldInfo> fieldList = new ArrayList<>();
+        List<FieldInfo> fieldExtendList = new ArrayList<>();
         // 使用try-with-resources确保资源被正确关闭
         try (PreparedStatement ps = conn.prepareStatement(String.format(SQL_SHOW_TABLE_FIELD, tableInfo.getTableName()));
              ResultSet fieldResult = ps.executeQuery()) {
@@ -170,29 +171,55 @@ public class BuildTable {
                 fieldInfo.setComment(comment);
                 
                 // 获取字段类型并映射到Java类型
-                String fieldType = fieldResult.getString("type");
+                String fieldType = fieldResult.getString("type").toUpperCase();
                 if (fieldType.indexOf("(") > 0){
                     fieldType = fieldType.substring(0, fieldType.indexOf("("));
                 }
                 fieldInfo.setJavaType(getJavaType(fieldType));
-                fieldInfo.setSqlType(fieldType.toUpperCase());
+                fieldInfo.setSqlType(fieldType);
                 
                 // 获取是否自增
                 String extra = fieldResult.getString("extra");
                 fieldInfo.setIsAutoIncrement("auto_increment".equalsIgnoreCase(extra));
 
                 // 获取是否包含日期时间
-                if (tableInfo.getHaveDateTime() == null || BooleanUtils.compare(tableInfo.getHaveDateTime(), Boolean.FALSE)) tableInfo.setHaveDateTime(ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldType.toUpperCase()));
+                if (tableInfo.getHaveDateTime() == null || BooleanUtils.compare(tableInfo.getHaveDateTime(), Boolean.FALSE)) tableInfo.setHaveDateTime(ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldType));
                 // 获取是否包含日期
-                if (tableInfo.getHaveDate() == null || BooleanUtils.compare(tableInfo.getHaveDate(), Boolean.FALSE)) tableInfo.setHaveDate(ArrayUtils.contains(Constants.DATE_TYPES, fieldType.toUpperCase()));
+                if (tableInfo.getHaveDate() == null || BooleanUtils.compare(tableInfo.getHaveDate(), Boolean.FALSE)) tableInfo.setHaveDate(ArrayUtils.contains(Constants.DATE_TYPES, fieldType));
                 // 获取是否包含BigDecimal
-                if (tableInfo.getHaveBigDecimal() == null || BooleanUtils.compare(tableInfo.getHaveBigDecimal(), Boolean.FALSE)) tableInfo.setHaveBigDecimal(ArrayUtils.contains(Constants.DECIMAL_TYPES, fieldType.toUpperCase()) ||
+                if (tableInfo.getHaveBigDecimal() == null || BooleanUtils.compare(tableInfo.getHaveBigDecimal(), Boolean.FALSE)) tableInfo.setHaveBigDecimal(ArrayUtils.contains(Constants.DECIMAL_TYPES, fieldType) ||
                         ArrayUtils.contains(Constants.FLOAT_TYPES, fieldType.toUpperCase()));
 
                 fieldList.add(fieldInfo);
+
+                if (ArrayUtils.contains(Constants.STRING_TYPES, fieldType)){
+                    FieldInfo fuzzyField = new FieldInfo();
+                    fuzzyField.setPropertyName(fieldInfo.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_FUZZY);
+                    fuzzyField.setJavaType(fieldInfo.getJavaType());
+                    fuzzyField.setFieldName(fieldInfo.getFieldName());
+                    fuzzyField.setSqlType(fieldInfo.getSqlType());
+                    fieldExtendList.add(fuzzyField);
+                }
+
+                if (ArrayUtils.contains(Constants.DATE_TIME_TYPES, fieldType) || ArrayUtils.contains(Constants.DATE_TYPES, fieldType)){
+                    FieldInfo startTimeFieldInfo = new FieldInfo();
+                    startTimeFieldInfo.setPropertyName(fieldInfo.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_TIME_START);
+                    startTimeFieldInfo.setJavaType("String");
+                    startTimeFieldInfo.setFieldName(fieldInfo.getFieldName());
+                    startTimeFieldInfo.setSqlType(fieldInfo.getSqlType());
+                    fieldExtendList.add(startTimeFieldInfo);
+
+                    FieldInfo endTimeFieldInfo = new FieldInfo();
+                    endTimeFieldInfo.setPropertyName(fieldInfo.getPropertyName() + Constants.SUFFIX_BEAN_QUERY_TIME_END);
+                    endTimeFieldInfo.setJavaType("String");
+                    endTimeFieldInfo.setFieldName(fieldInfo.getFieldName());
+                    endTimeFieldInfo.setSqlType(fieldInfo.getSqlType());
+                    fieldExtendList.add(endTimeFieldInfo);
+                }
             }
 
             tableInfo.setFieldList(fieldList);
+            tableInfo.setFieldExtendList(fieldExtendList);
         } catch (SQLException e) {
             logger.error("查询表 {} 的字段信息失败", tableInfo.getTableName(), e);
         }

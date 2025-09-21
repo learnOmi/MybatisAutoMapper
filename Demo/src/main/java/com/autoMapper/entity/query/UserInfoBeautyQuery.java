@@ -3,9 +3,9 @@ package com.autoMapper.entity.query;
 /**
  * 靓号表查询
  * @author 'Tong'
- * @since 2025/09/18
+ * @since 2025/09/21
  */
-public class UserInfoBeautyQuery {
+public class UserInfoBeautyQuery extends BaseQuery {
 	// 
 	private Integer id;
 	// 邮箱

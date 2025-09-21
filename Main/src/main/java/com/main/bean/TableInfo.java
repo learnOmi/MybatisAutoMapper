@@ -10,6 +10,7 @@ public class TableInfo {
     private String beanParamName;
     private String comment;
     private List<FieldInfo> fieldList;
+    private List<FieldInfo> fieldExtendList;
     private Map<String, List<FieldInfo>> keyIndexMap = new LinkedHashMap<>();
     private Boolean haveDate;
     private Boolean haveDateTime;
@@ -53,6 +54,14 @@ public class TableInfo {
 
     public void setFieldList(List<FieldInfo> fieldList) {
         this.fieldList = fieldList;
+    }
+
+    public List<FieldInfo> getFieldExtendList() {
+        return fieldExtendList;
+    }
+
+    public void setFieldExtendList(List<FieldInfo> fieldExtendList) {
+        this.fieldExtendList = fieldExtendList;
     }
 
     public Map<String, List<FieldInfo>> getKeyIndexMap() {
