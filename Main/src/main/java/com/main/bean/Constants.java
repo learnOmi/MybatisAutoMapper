@@ -10,6 +10,8 @@ public class Constants {
     public static String SUFFIX_BEAN_QUERY_TIME_START;
     public static String SUFFIX_BEAN_QUERY_TIME_END;
     public static String SUFFIX_MAPPER;
+    public static String SUFFIX_SERVICE;
+    public static String SUFFIX_SERVICE_IMPL;
 
     // 需要忽略的属性
     public static String IGNORE_BEAN_TOJSON_FILED;
@@ -22,6 +24,12 @@ public class Constants {
     public static String BEAN_DATE_PARSE_EXPRESSION;
     public static String BEAN_DATE_PARSE_CLASS;
 
+    public static String PATH_VO;
+    public static String PACKAGE_VO;
+    public static String PATH_SERVICE_IMPL;
+    public static String PACKAGE_SERVICE_IMPL;
+    public static String PATH_SERVICE;
+    public static String PACKAGE_SERVICE;
     public static String PATH_MAPPER_XML;
     public static String PACKAGE_MAPPER;
     public static String PATH_MAPPER;
@@ -77,6 +85,8 @@ public class Constants {
         SUFFIX_BEAN_QUERY_TIME_START = PropertiesUtils.getString("suffix.bean.query.time.start");
         SUFFIX_BEAN_QUERY_TIME_END = PropertiesUtils.getString("suffix.bean.query.time.end");
         SUFFIX_MAPPER = PropertiesUtils.getString("suffix.mapper");
+        SUFFIX_SERVICE = PropertiesUtils.getString("suffix.service");
+        SUFFIX_SERVICE_IMPL = PropertiesUtils.getString("suffix.service.impl");
 
         IGNORE_BEAN_TOJSON_FILED = PropertiesUtils.getString("ignore.bean.tojson.filed");
         IGNORE_BEAN_TOJSON_EXPRESSION = PropertiesUtils.getString("ignore.bean.tojson.expression");
@@ -92,6 +102,9 @@ public class Constants {
         PACKAGE_UTILS = PACKAGE_BASE + "." + PropertiesUtils.getString("package.utils");
         PACKAGE_ENUM = PACKAGE_BASE + "." + PropertiesUtils.getString("package.enum");
         PACKAGE_MAPPER = PACKAGE_BASE + "." + PropertiesUtils.getString("package.mapper");
+        PACKAGE_SERVICE = PACKAGE_BASE + "." + PropertiesUtils.getString("package.service");
+        PACKAGE_SERVICE_IMPL = PACKAGE_BASE + "." + PropertiesUtils.getString("package.service.impl");
+        PACKAGE_VO = PACKAGE_BASE + "." + PropertiesUtils.getString("package.vo");
 
         PATH_BASE = PropertiesUtils.getString("path.base");
         PATH_BASE = PATH_BASE + PATH_JAVA;
@@ -101,6 +114,9 @@ public class Constants {
         PATH_UTILS = PATH_BASE + "/" + PACKAGE_UTILS.replace(".", "/");
         PATH_ENUM = PATH_BASE + "/" + PACKAGE_ENUM.replace(".", "/");
         PATH_MAPPER = PATH_BASE + "/" + PACKAGE_MAPPER.replace(".", "/");
-        PATH_MAPPER_XML = PropertiesUtils.getString("path.base") + PATH_RESOURCE + "/" + PACKAGE_MAPPER.replace(".", "/");
+        PATH_MAPPER_XML = PATH_BASE + "/" + PACKAGE_MAPPER.replace(".", "/") + "/" + PATH_RESOURCE;
+        PATH_SERVICE = PATH_BASE + "/" + PACKAGE_SERVICE.replace(".", "/");
+        PATH_SERVICE_IMPL = PATH_BASE + "/" + PACKAGE_SERVICE_IMPL.replace(".", "/");
+        PATH_VO = PATH_BASE + "/" + PACKAGE_VO.replace(".", "/");
     }
 }

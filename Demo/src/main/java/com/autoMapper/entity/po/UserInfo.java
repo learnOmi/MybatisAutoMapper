@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * 用户信息表
  * @author 'Tong'
- * @since 2025/09/22
+ * @since 2025/09/24
  */
 public class UserInfo implements Serializable {
 	// 用户id
