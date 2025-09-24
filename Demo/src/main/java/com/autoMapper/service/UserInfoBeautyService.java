@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 靓号表Service
  * @author 'Tong'
- * @since 2025/09/24
+ * @since 2025/09/25
  */
 public interface UserInfoBeautyService {
 	// 根据条件查询列表

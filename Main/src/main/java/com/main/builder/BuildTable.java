@@ -137,19 +137,24 @@ public class BuildTable {
         return tableList;
     }
 
+/**
+ * 读取数据库表字段信息
+ * @param tableInfo 表信息对象，包含表名等信息
+ */
     public static void readFieldInfo(TableInfo tableInfo) {
-        // 检查数据库连接是否存在
+        // 检查数据库连接是否存在，若不存在则直接返回
         if (conn == null) {
             logger.warn("数据库连接未建立，无法获取表信息");
             return;
         }
 
-        // 首先检查表名是否合法，防止SQL注入
+        // 首先检查表名是否合法，防止SQL注入攻击
         if (!isValidTableName(tableInfo.getTableName())) {
             logger.error("表名不合法: {}", tableInfo.getTableName());
             return;
         }
 
+        // 初始化字段列表和扩展字段列表
         List<FieldInfo> fieldList = new ArrayList<>();
         List<FieldInfo> fieldExtendList = new ArrayList<>();
         // 使用try-with-resources确保资源被正确关闭

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 用户信息表Service
  * @author 'Tong'
- * @since 2025/09/24
+ * @since 2025/09/25
  */
 public interface UserInfoService {
 	// 根据条件查询列表

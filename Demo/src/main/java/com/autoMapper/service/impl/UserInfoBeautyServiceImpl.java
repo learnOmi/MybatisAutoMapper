@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 靓号表ServiceImpl
  * @author 'Tong'
- * @since 2025/09/24
+ * @since 2025/09/25
  */
 @Service("userInfoBeautyService")
 public class UserInfoBeautyServiceImpl implements UserInfoBeautyService {

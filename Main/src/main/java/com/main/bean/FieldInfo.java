@@ -1,11 +1,33 @@
 package com.main.bean;
 
+/**
+ * FieldInfo类用于表示数据库表中的一个字段信息
+ * 包含字段名、属性名、SQL类型、Java类型、注释和是否自增等信息
+ */
 public class FieldInfo {
+    /**
+     * 数据库中的字段名
+     */
     private String fieldName;
+    /**
+     * 对应的Java属性名（通常是将字段名转换为驼峰命名）
+     */
     private String propertyName;
+    /**
+     * 数据库中的字段类型（如VARCHAR, INT, DATETIME等）
+     */
     private String sqlType;
+    /**
+     * 对应的Java类型（如String, Integer, Date等）
+     */
     private String javaType;
+    /**
+     * 字段的注释说明
+     */
     private String comment;
+    /**
+     * 是否为自增字段
+     */
     private Boolean isAutoIncrement;
 
     public String getFieldName() {
