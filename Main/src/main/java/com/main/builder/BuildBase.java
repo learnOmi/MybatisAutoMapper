@@ -68,6 +68,42 @@ public class BuildBase {
         headerInfoList.add("import java.util.List;");
         headerInfoList.add("import java.util.ArrayList;");
         build(headerInfoList, "PaginationResultVO", Constants.PATH_VO);
+
+        // 清空列表，为下一个文件做准备
+        headerInfoList.clear();
+        // 生成BaseException异常类
+        headerInfoList.add("package " + Constants.PACKAGE_EXCEPTION + ";");
+        headerInfoList.add("import " + Constants.PACKAGE_ENUM + ".ResponseCodeEnum;");
+        build(headerInfoList, "BusinessException", Constants.PATH_EXCEPTION);
+
+        // 清空列表，为下一个文件做准备
+        headerInfoList.clear();
+        // 生成异常CODE枚举类
+        headerInfoList.add("package " + Constants.PACKAGE_ENUM + ";");
+        build(headerInfoList, "ResponseCodeEnum", Constants.PATH_ENUM);
+
+        // 清空列表，为下一个文件做准备
+        headerInfoList.clear();
+        // 生成BaseController控制器类
+        headerInfoList.add("package " + Constants.PACKAGE_CONTROLLER + ";");
+        headerInfoList.add("import " + Constants.PACKAGE_ENUM + ".ResponseCodeEnum;");
+        headerInfoList.add("import " + Constants.PACKAGE_VO + ".ResponseVO;");
+        build(headerInfoList, "ABaseController", Constants.PATH_CONTROLLER);
+
+        // 清空列表，为下一个文件做准备
+        headerInfoList.clear();
+        // 生成ResponseVO响应类
+        headerInfoList.add("package " + Constants.PACKAGE_VO + ";");
+        build(headerInfoList, "ResponseVO", Constants.PATH_VO);
+
+        // 清空列表，为下一个文件做准备
+        headerInfoList.clear();
+        // 生成AGlobalExceptionHandlerController全局异常处理器类
+        headerInfoList.add("package " + Constants.PACKAGE_CONTROLLER + ";");
+        headerInfoList.add("import " + Constants.PACKAGE_ENUM + ".ResponseCodeEnum;");
+        headerInfoList.add("import " + Constants.PACKAGE_VO + ".ResponseVO;");
+        headerInfoList.add("import " + Constants.PACKAGE_EXCEPTION + ".BusinessException;");
+        build(headerInfoList, "AGlobalExceptionHandlerController", Constants.PATH_CONTROLLER);
     }
 
     /**
