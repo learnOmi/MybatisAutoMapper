@@ -16,6 +16,7 @@ public class Application {
             BuildMapperXml.execute(tableInfo);
             BuildService.execute(tableInfo);
             BuildServiceImpl.execute(tableInfo);
+            BuildController.execute(tableInfo);
         }
     }
 }

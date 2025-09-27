@@ -3,7 +3,7 @@ package com.autoMapper.entity.query;
 /**
  * 靓号表查询
  * @author 'Tong'
- * @since 2025/09/25
+ * @since 2025/09/28
  */
 public class UserInfoBeautyQuery extends BaseQuery {
 	// 

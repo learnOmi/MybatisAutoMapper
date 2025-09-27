@@ -24,6 +24,8 @@ public class Constants {
     public static String SUFFIX_SERVICE;
     // Service实现类后缀
     public static String SUFFIX_SERVICE_IMPL;
+    // Controller后缀
+    public static String SUFFIX_CONTROLLER;
 
     // 需要忽略的属性
     public static String IGNORE_BEAN_TOJSON_FILED;
@@ -121,6 +123,7 @@ public class Constants {
         SUFFIX_MAPPER = PropertiesUtils.getString("suffix.mapper");
         SUFFIX_SERVICE = PropertiesUtils.getString("suffix.service");
         SUFFIX_SERVICE_IMPL = PropertiesUtils.getString("suffix.service.impl");
+        SUFFIX_CONTROLLER = PropertiesUtils.getString("suffix.controller");
 
         // 加载JSON忽略配置
         IGNORE_BEAN_TOJSON_FILED = PropertiesUtils.getString("ignore.bean.tojson.filed");

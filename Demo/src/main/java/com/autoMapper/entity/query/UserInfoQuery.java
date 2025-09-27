@@ -4,7 +4,7 @@ import java.util.Date;
 /**
  * 用户信息表查询
  * @author 'Tong'
- * @since 2025/09/25
+ * @since 2025/09/28
  */
 public class UserInfoQuery extends BaseQuery {
 	// 用户id
