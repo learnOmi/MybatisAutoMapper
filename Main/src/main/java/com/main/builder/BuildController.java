@@ -93,7 +93,7 @@ public class BuildController {
             bw.newLine();
             bw.write("\tpublic ResponseVO loadDataList(" + tableInfo.getBeanParamName() + " query) {");
             bw.newLine();
-            bw.write("\t\treturn getSuccessResponse(" + serviceBeanName + ".findListByParam(query));");
+            bw.write("\t\treturn getSuccessResponse(" + serviceBeanName + ".findPageByParam(query));");
             bw.newLine();
             bw.write("\t}");
             bw.newLine();
