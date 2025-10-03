@@ -77,6 +77,7 @@ public class Constants {
     private static String PATH_JAVA = "java";
     // 资源文件路径
     private static String PATH_RESOURCE = "resources";
+    private static String PACKAGE_RESOURCE;
     
     // 数据库类型到Java类型的映射常量
     public static final String JAVA_TYPE_INT = "Integer";
@@ -150,6 +151,7 @@ public class Constants {
 
         // 加载路径配置
         PATH_BASE = PropertiesUtils.getString("path.base");
+        PACKAGE_RESOURCE = PATH_BASE + PATH_RESOURCE;
         PATH_BASE = PATH_BASE + PATH_JAVA;
 
         PATH_PO = PATH_BASE + "/" + PACKAGE_PO.replace(".", "/");
@@ -157,7 +159,8 @@ public class Constants {
         PATH_UTILS = PATH_BASE + "/" + PACKAGE_UTILS.replace(".", "/");
         PATH_ENUM = PATH_BASE + "/" + PACKAGE_ENUM.replace(".", "/");
         PATH_MAPPER = PATH_BASE + "/" + PACKAGE_MAPPER.replace(".", "/");
-        PATH_MAPPER_XML = PATH_BASE + "/" + PACKAGE_MAPPER.replace(".", "/") + "/" + PATH_RESOURCE;
+        //PATH_MAPPER_XML = PATH_BASE + "/" + PACKAGE_MAPPER.replace(".", "/") + "/" + PATH_RESOURCE;
+        PATH_MAPPER_XML = PACKAGE_RESOURCE + "/" + PACKAGE_MAPPER.replace(".", "/");
         PATH_SERVICE = PATH_BASE + "/" + PACKAGE_SERVICE.replace(".", "/");
         PATH_SERVICE_IMPL = PATH_BASE + "/" + PACKAGE_SERVICE_IMPL.replace(".", "/");
         PATH_VO = PATH_BASE + "/" + PACKAGE_VO.replace(".", "/");

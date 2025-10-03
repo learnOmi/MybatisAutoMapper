@@ -1,8 +1,8 @@
-package com.autoMapper.service;
+package com.easychat.service;
 
-import com.autoMapper.entity.po.UserInfo;
-import com.autoMapper.entity.query.UserInfoQuery;
-import com.autoMapper.entity.vo.PaginationResultVO;
+import com.easychat.entity.po.UserInfo;
+import com.easychat.entity.query.UserInfoQuery;
+import com.easychat.entity.vo.PaginationResultVO;
 import java.util.List;
 
 /**

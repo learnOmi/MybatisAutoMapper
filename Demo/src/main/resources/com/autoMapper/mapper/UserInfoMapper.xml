@@ -38,7 +38,7 @@
 
 <!-- 基础查询条件 -->
 	<sql id="base_query_condition">
-		<if test="query.userId != null ">
+		<if test="query.userId != null and query.userId!=''">
 			and user_id = #{query.userId}
 		</if>
 		<if test="query.email != null and query.email!=''">
@@ -81,6 +81,9 @@
 
 	<!-- 扩展查询条件 -->
 	<sql id="base_query_condition_extend">
+		<if test="query.userIdFuzzy != null and query.userIdFuzzy !=''">
+			and user_id like concat('%',#{query.userIdFuzzy},'%')
+		</if>
 		<if test="query.emailFuzzy != null and query.emailFuzzy !=''">
 			and email like concat('%',#{query.emailFuzzy},'%')
 		</if>

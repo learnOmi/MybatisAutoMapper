@@ -1,10 +1,10 @@
-package com.autoMapper.controller;
+package com.easychat.controller;
 
-import com.autoMapper.entity.po.UserInfoBeauty;
-import com.autoMapper.entity.query.UserInfoBeautyQuery;
-import com.autoMapper.service.UserInfoBeautyService;
-import com.autoMapper.entity.vo.ResponseVO;
-import com.autoMapper.service.UserInfoBeautyService;
+import com.easychat.entity.po.UserInfoBeauty;
+import com.easychat.entity.query.UserInfoBeautyQuery;
+import com.easychat.service.UserInfoBeautyService;
+import com.easychat.entity.vo.ResponseVO;
+import com.easychat.service.UserInfoBeautyService;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -27,7 +27,7 @@ public class MapperTest {
 //        }
 
         UserInfoQuery query = new UserInfoQuery();
-        query.setUserId(1);
+        query.setUserId("1");
         query.setCreateTimeStart("2024-01-01");
         List<UserInfo> dataList2 = userInfoMapper.selectList(query);
         for (UserInfo data : dataList2) {
@@ -46,23 +46,23 @@ public class MapperTest {
         UserInfo userInfo = new UserInfo();
         userInfo.setNickName("张w");
         userInfo.setCreateTime(new Date());
-        userInfoMapper.updateByUserId(userInfo, 1);
+        userInfoMapper.updateByUserId(userInfo, "1");
     }
 
     @Test
     public void delete() {
-        userInfoMapper.deleteByUserId(12);
+        userInfoMapper.deleteByUserId("12");
     }
 
     @Test
     public void insert() {
         UserInfo userInfo = new UserInfo();
         UserInfo userInfo1 = new UserInfo();
-        userInfo.setUserId(12);
+        userInfo.setUserId("12");
         userInfo.setNickName("张三");
         userInfo.setCreateTime(new Date());
 
-        userInfo1.setUserId(13);
+        userInfo1.setUserId("13");
         userInfo1.setNickName("李四");
         userInfo1.setCreateTime(new Date());
 

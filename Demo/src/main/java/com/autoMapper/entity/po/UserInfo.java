@@ -10,11 +10,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * 用户信息表
  * @author 'Tong'
- * @since 2025/09/28
+ * @since 2025/10/04
  */
 public class UserInfo implements Serializable {
 	// 用户id
-	private Integer userId;
+	private String userId;
 	// 邮箱
 	private String email;
 	// 昵称
@@ -45,11 +45,11 @@ public class UserInfo implements Serializable {
 	// 最后离开时间
 	private Long lastOffTime;
 
-	public void setUserId(Integer userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	public Integer getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 

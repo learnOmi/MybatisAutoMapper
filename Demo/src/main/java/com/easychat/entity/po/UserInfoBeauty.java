@@ -1,23 +1,23 @@
-package com.autoMapper.entity.query;
+package com.easychat.entity.po;
 
+import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
- * 靓号表查询
+ * 靓号表
  * @author 'Tong'
  * @since 2025/10/04
  */
-public class UserInfoBeautyQuery extends BaseQuery {
+public class UserInfoBeauty implements Serializable {
 	// 
 	private Integer id;
 	// 邮箱
 	private String email;
-	private String emailFuzzy;
-
 	// 用户id
 	private String userId;
-	private String userIdFuzzy;
-
 	// 0: 未启用 1:启用
+	@JsonIgnore
 	private Byte status;
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -50,20 +50,13 @@ public class UserInfoBeautyQuery extends BaseQuery {
 		return status;
 	}
 
-	public void setEmailFuzzy(String emailFuzzy) {
-		this.emailFuzzy = emailFuzzy;
+	@Override
+	public String toString() {
+		return "UserInfoBeauty [" +
+			"id=" + (id == null ? "空" : id) + ", " +
+			"email=" + (email == null ? "空" : email) + ", " +
+			"userId=" + (userId == null ? "空" : userId) + ", " +
+			"status=" + (status == null ? "空" : status) + 
+			"]";
 	}
-
-	public String getEmailFuzzy() {
-		return emailFuzzy;
-	}
-
-	public void setUserIdFuzzy(String userIdFuzzy) {
-		this.userIdFuzzy = userIdFuzzy;
-	}
-
-	public String getUserIdFuzzy() {
-		return userIdFuzzy;
-	}
-
 }

@@ -1,11 +1,11 @@
-package com.autoMapper.service.impl;
+package com.easychat.service.impl;
 
-import com.autoMapper.enums.PageSize;
-import com.autoMapper.entity.query.SimplePage;
-import com.autoMapper.entity.po.UserInfoBeauty;
-import com.autoMapper.entity.query.UserInfoBeautyQuery;
-import com.autoMapper.mapper.UserInfoBeautyMapper;import com.autoMapper.entity.vo.PaginationResultVO;
-import com.autoMapper.service.UserInfoBeautyService;
+import com.easychat.enums.PageSize;
+import com.easychat.entity.query.SimplePage;
+import com.easychat.entity.po.UserInfoBeauty;
+import com.easychat.entity.query.UserInfoBeautyQuery;
+import com.easychat.mapper.UserInfoBeautyMapper;import com.easychat.entity.vo.PaginationResultVO;
+import com.easychat.service.UserInfoBeautyService;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 import java.util.List;

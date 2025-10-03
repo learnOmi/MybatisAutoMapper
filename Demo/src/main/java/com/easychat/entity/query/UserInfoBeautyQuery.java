@@ -1,4 +1,4 @@
-package com.autoMapper.entity.query;
+package com.easychat.entity.query;
 
 /**
  * 靓号表查询

@@ -1,22 +1,13 @@
-package com.autoMapper.mapper;
+package com.easychat.mapper;
 
 import org.apache.ibatis.annotations.Param;
 
 /**
- * 靓号表mapper
+ * 用户信息表mapper
  * @author 'Tong'
  * @since 2025/10/04
  */
-public interface UserInfoBeautyMapper<T, P> extends BaseMapper {
-
-	// 根据Id查询
-	T selectById(@Param("id") Integer id);
-
-	// 根据Id更新
-	Integer updateById(@Param("bean") T t, @Param("id") Integer id);
-
-	// 根据Id删除
-	Integer deleteById(@Param("id") Integer id);
+public interface UserInfoMapper<T, P> extends BaseMapper {
 
 	// 根据UserId查询
 	T selectByUserId(@Param("userId") String userId);
