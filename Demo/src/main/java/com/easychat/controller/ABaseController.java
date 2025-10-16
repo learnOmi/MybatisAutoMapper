@@ -4,6 +4,8 @@ import com.easychat.enums.ResponseCodeEnum;
 
 import com.easychat.entity.vo.ResponseVO;
 
+import com.easychat.exception.BusinessException;
+
 public class ABaseController {
     protected static final String STATUS_SUCCESS = "success";
     protected static final String STATUS_ERROR = "error";
@@ -14,6 +16,29 @@ public class ABaseController {
         responseVO.setData(t);
         responseVO.setMessage(ResponseCodeEnum.CODE_200.getMsg());
         responseVO.setCode(ResponseCodeEnum.CODE_200.getCode());
+        return responseVO;
+    }
+
+    protected <T> ResponseVO getBusinessErrorResponse(BusinessException e, T t) {
+        ResponseVO<T> responseVO = new ResponseVO<>();
+        responseVO.setStatus(STATUS_ERROR);
+        if (e.getCode() != null) {
+            responseVO.setCode(e.getCode());
+        } else {
+            responseVO.setCode(ResponseCodeEnum.CODE_600.getCode());
+        }
+        responseVO.setMessage(e.getMessage());
+        responseVO.setData(t);
+
+        return responseVO;
+    }
+
+    protected <T> ResponseVO getServerErrorResponse(T t) {
+        ResponseVO<T> responseVO = new ResponseVO<>();
+        responseVO.setStatus(STATUS_ERROR);
+        responseVO.setCode(ResponseCodeEnum.CODE_500.getCode());
+        responseVO.setMessage(ResponseCodeEnum.CODE_500.getMsg());
+        responseVO.setData(t);
         return responseVO;
     }
 }

@@ -88,6 +88,7 @@ public class BuildBase {
         headerInfoList.add("package " + Constants.PACKAGE_CONTROLLER + ";");
         headerInfoList.add("import " + Constants.PACKAGE_ENUM + ".ResponseCodeEnum;");
         headerInfoList.add("import " + Constants.PACKAGE_VO + ".ResponseVO;");
+        headerInfoList.add("import " + Constants.PACKAGE_EXCEPTION + ".BusinessException;");
         build(headerInfoList, "ABaseController", Constants.PATH_CONTROLLER);
 
         // 清空列表，为下一个文件做准备
