@@ -161,6 +161,26 @@ public class BuildServiceImpl {
             bw.newLine();
             bw.newLine();
 
+            // 多条件更新
+            BuildComment.createFieldComment(bw, "多条件更新");
+            bw.write("\tpublic Integer updateByParam(" + tableInfo.getBeanName() + "bean, " + tableInfo.getBeanParamName() + " query) {");
+            bw.newLine();
+            bw.write("\t\treturn this." + mapperBeanName + ".updateByParam(bean, query);");
+            bw.newLine();
+            bw.write("\t}");
+            bw.newLine();
+            bw.newLine();
+
+            // 多条件删除
+            BuildComment.createFieldComment(bw, "多条件删除");
+            bw.write("\tpublic Integer deleteByParam(" + tableInfo.getBeanParamName() + " query) {");
+            bw.newLine();
+            bw.write("\t\treturn this." + mapperBeanName + ".deleteByParam(query);");
+            bw.newLine();
+            bw.write("\t}");
+            bw.newLine();
+            bw.newLine();
+
             // 根据主键生成查询、更新、删除方法
             Map<String, List<FieldInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
             for(Map.Entry<String, List<FieldInfo>> entry : keyIndexMap.entrySet()) {

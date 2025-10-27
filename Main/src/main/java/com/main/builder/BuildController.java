@@ -139,6 +139,32 @@ public class BuildController {
             bw.newLine();
             bw.newLine();
 
+            BuildComment.createFieldComment(bw, "多条件更新");
+            bw.write("\t@RequestMapping(\"updateByParam\")");
+            bw.newLine();
+            bw.write("\tpublic ResponseVO updateByParam(" + tableInfo.getBeanName() + " bean, " + tableInfo.getBeanParamName() + " param) {");
+            bw.newLine();
+            bw.write("\t\tthis." + serviceBeanName + ".updateByParam(bean, param);");
+            bw.newLine();
+            bw.write("\t\treturn getSuccessResponse(null);");
+            bw.newLine();
+            bw.write("\t}");
+            bw.newLine();
+            bw.newLine();
+
+            BuildComment.createFieldComment(bw, "多条件删除");
+            bw.write("\t@RequestMapping(\"deleteByParam\")");
+            bw.newLine();
+            bw.write("\tpublic ResponseVO deleteByParam(" + tableInfo.getBeanParamName() + " param) {");
+            bw.newLine();
+            bw.write("\t\tthis." + serviceBeanName + ".deleteByParam(param);");
+            bw.newLine();
+            bw.write("\t\treturn getSuccessResponse(null);");
+            bw.newLine();
+            bw.write("\t}");
+            bw.newLine();
+            bw.newLine();
+
             // 根据主键生成查询、更新、删除方法
             Map<String, List<FieldInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
             for(Map.Entry<String, List<FieldInfo>> entry : keyIndexMap.entrySet()) {

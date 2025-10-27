@@ -95,6 +95,18 @@ public class BuildService {
             bw.newLine();
             bw.newLine();
 
+            // 多条件更新
+            BuildComment.createFieldComment(bw, "多条件更新");
+            bw.write("\tInteger updateByParam(" + tableInfo.getBeanName() + " bean, " + tableInfo.getBeanParamName() + " query);");
+            bw.newLine();
+            bw.newLine();
+
+            // 多条件删除
+            BuildComment.createFieldComment(bw, "多条件更新");
+            bw.write("\tInteger deleteByParam(" + tableInfo.getBeanParamName() + " query);");
+            bw.newLine();
+            bw.newLine();
+
             // 根据主键生成的方法
             Map<String, List<FieldInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
             for(Map.Entry<String, List<FieldInfo>> entry : keyIndexMap.entrySet()) {

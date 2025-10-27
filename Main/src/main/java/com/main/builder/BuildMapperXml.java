@@ -10,9 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * BuildMapperXml类用于生成MyBatis的Mapper XML文件
@@ -411,8 +409,84 @@ public class BuildMapperXml {
             bw.newLine();
             bw.write("\t</insert>");
             bw.newLine();
-
             bw.newLine();
+
+            // 生成多条件更新SQL
+            bw.write("\t<!-- 多条件更新 -->");
+            bw.newLine();
+            bw.write("\t<update id=\"updateByParam\">");
+            bw.newLine();
+            bw.write("\t\tupdate " + tableInfo.getTableName());
+            bw.newLine();
+            bw.write("\t\t<set>");
+            bw.newLine();
+            // 生成更新字段（跳过自增字段）
+            for (FieldInfo fieldInfo : tableInfo.getFieldList()) {
+                if (fieldInfo.getIsAutoIncrement()) continue;
+                bw.write("\t\t\t<if test=\"bean." + fieldInfo.getPropertyName() + " != null\">");
+                bw.newLine();
+                bw.write("\t\t\t\t" + fieldInfo.getFieldName() + " = #{bean." + fieldInfo.getPropertyName() + "}, ");
+                bw.newLine();
+                bw.write("\t\t\t</if>");
+                bw.newLine();
+            }
+            bw.write("\t\t</set>");
+            bw.newLine();
+            bw.write("\t\t<where>");
+            bw.newLine();
+            // 生成条件字段
+            // 检查主键和唯一索引
+            Set<String> keyFieldSet = new HashSet<>();
+            StringBuilder anyKeyExist = new StringBuilder();
+            for (Map.Entry<String, List<FieldInfo>> entry : keyIndexMap.entrySet()) {
+                List<FieldInfo> keyFieldInfoList = entry.getValue();
+                for (FieldInfo fieldInfo : keyFieldInfoList) {
+                    if (keyFieldSet.contains(fieldInfo.getPropertyName())) continue;
+                    keyFieldSet.add(fieldInfo.getPropertyName());
+                    anyKeyExist.append("query.").append(fieldInfo.getPropertyName()).append(" == null and ");
+                }
+            }
+            anyKeyExist.delete(anyKeyExist.length() - 4, anyKeyExist.length());
+            bw.write("\t\t\t<if test=\"" + anyKeyExist + "\">");
+            bw.newLine();
+            bw.write("\t\t\t\t1 = 2");
+            bw.newLine();
+            bw.write("\t\t\t</if>");
+            bw.newLine();
+            // 引用通用查询条件
+            bw.write("\t\t<include refid=\"" + QUERY_CONDITION + "\"/>");
+            bw.newLine();
+            bw.write("\t\t</where>");
+            bw.newLine();
+            bw.write("\t</update>");
+            bw.newLine();
+            bw.newLine();
+
+            // 生成多条件删除SQL
+            bw.write("\t<!-- 多条件删除 -->");
+            bw.newLine();
+            bw.write("\t<delete id=\"deleteByParam\">");
+            bw.newLine();
+            bw.write("\t\tdelete from " + tableInfo.getTableName());
+            bw.newLine();
+            bw.write("\t\t<where>");
+            bw.newLine();
+            // 生成条件字段
+            bw.write("\t\t\t<if test=\"" + anyKeyExist + "\">");
+            bw.newLine();
+            bw.write("\t\t\t\t1 = 2");
+            bw.newLine();
+            bw.write("\t\t\t</if>");
+            bw.newLine();
+            // 引用通用查询条件
+            bw.write("\t\t<include refid=\"" + QUERY_CONDITION + "\"/>");
+            bw.newLine();
+            bw.write("\t\t</where>");
+            bw.newLine();
+            bw.write("\t</delete>");
+            bw.newLine();
+            bw.newLine();
+
         // 根据主键生成对应的查询、删除、更新SQL
             for (Map.Entry<String, List<FieldInfo>> entry : keyIndexMap.entrySet()) {
                 List<FieldInfo> keyFieldInfoList = entry.getValue();

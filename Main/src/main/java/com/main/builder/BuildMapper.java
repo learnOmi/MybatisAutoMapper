@@ -64,6 +64,17 @@ public class BuildMapper {
             bw.write("public interface " + className + "<T, P> extends BaseMapper {");
             bw.newLine();
 
+            // 多条件更新
+            BuildComment.createFieldComment(bw, "多条件更新");
+            bw.write("\tInteger updateByParam(@Param(\"bean\") T t, @Param(\"query\") P p);");
+            bw.newLine();
+            bw.newLine();
+
+            // 多条件删除
+            BuildComment.createFieldComment(bw, "多条件删除");
+            bw.write("\tInteger deleteByParam(@Param(\"query\") P p);");
+            bw.newLine();
+
             // 获取表的主键和唯一索引信息，用于生成对应的查询、更新和删除方法
             Map<String, List<FieldInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
             // 遍历每个主键或唯一索引，为每个索引生成对应的CRUD方法
