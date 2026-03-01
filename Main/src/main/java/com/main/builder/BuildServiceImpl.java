@@ -163,7 +163,7 @@ public class BuildServiceImpl {
 
             // 多条件更新
             BuildComment.createFieldComment(bw, "多条件更新");
-            bw.write("\tpublic Integer updateByParam(" + tableInfo.getBeanName() + "bean, " + tableInfo.getBeanParamName() + " query) {");
+            bw.write("\tpublic Integer updateByParam(" + tableInfo.getBeanName() + " bean, " + tableInfo.getBeanParamName() + " query) {");
             bw.newLine();
             bw.write("\t\treturn this." + mapperBeanName + ".updateByParam(bean, query);");
             bw.newLine();
