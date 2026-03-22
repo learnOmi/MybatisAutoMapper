@@ -28,6 +28,7 @@ public class BuildMapperXml {
     private static final String BASE_QUERY_CONDITION_EXTEND = "base_query_condition_extend";
     // 通用查询条件SQL片段ID
     private static final String QUERY_CONDITION = "query_condition";
+    private static final String QUERY_CONDITION_WHERE = "query_condition_where";
 
     /**
      * 执行生成Mapper XML文件的方法
@@ -161,6 +162,18 @@ public class BuildMapperXml {
             bw.newLine();
             bw.write("\t<sql id=\"" + QUERY_CONDITION + "\">");
             bw.newLine();
+            bw.write("\t\t\t<include refid=\"" + BASE_QUERY_CONDITION + "\"/>");
+            bw.newLine();
+            bw.write("\t\t\t<include refid=\"" + BASE_QUERY_CONDITION_EXTEND + "\"/>");
+            bw.newLine();
+            bw.write("\t</sql>");
+            bw.newLine();
+
+            bw.newLine();
+            bw.write("\t<!-- 通用查询条件where -->");
+            bw.newLine();
+            bw.write("\t<sql id=\"" + QUERY_CONDITION_WHERE + "\">");
+            bw.newLine();
             bw.write("\t\t<where>");
             bw.newLine();
             bw.write("\t\t\t<include refid=\"" + BASE_QUERY_CONDITION + "\"/>");
@@ -182,7 +195,7 @@ public class BuildMapperXml {
             bw.newLine();
             bw.write("\t\tFROM " + tableInfo.getTableName() + " ");
             bw.newLine();
-            bw.write("\t\t<include refid=\"" + QUERY_CONDITION + "\"/>");
+            bw.write("\t\t<include refid=\"" + QUERY_CONDITION_WHERE + "\"/>");
             bw.newLine();
             bw.write("\t\t<if test=\"query.orderBy != null and query.orderBy != ''\">");
             bw.newLine();
@@ -207,7 +220,7 @@ public class BuildMapperXml {
             bw.newLine();
             bw.write("\t\tSELECT count(1) FROM " + tableInfo.getTableName() + " ");
             bw.newLine();
-            bw.write("\t\t<include refid=\"" + QUERY_CONDITION + "\"/>");
+            bw.write("\t\t<include refid=\"" + QUERY_CONDITION_WHERE + "\"/>");
             bw.newLine();
             bw.write("\t</select>");
             bw.newLine();
