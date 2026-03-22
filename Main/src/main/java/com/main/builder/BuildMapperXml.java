@@ -228,7 +228,7 @@ public class BuildMapperXml {
             }
         // 如果有自增字段，添加获取自增ID的selectKey
             if (autoIncrementField != null) {
-                bw.write("\t\t<selectKey keyProperty=\"bean." + autoIncrementField.getFieldName() + "\" order=\"AFTER\" resultType=\"" + autoIncrementField.getJavaType() + "\">");
+                bw.write("\t\t<selectKey keyProperty=\"bean." + autoIncrementField.getPropertyName() + "\" order=\"AFTER\" resultType=\"" + autoIncrementField.getJavaType() + "\">");
                 bw.newLine();
                 bw.write("\t\t\tSELECT LAST_INSERT_ID()");
                 bw.newLine();
